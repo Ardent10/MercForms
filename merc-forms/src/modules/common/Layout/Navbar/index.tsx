@@ -79,7 +79,7 @@ export function Navbar() {
 
           <Flex alignItems={"center"}>
             <Stack direction={"row"} spacing={7}>
-              <CustomTooltipWithIcon
+              {/* <CustomTooltipWithIcon
                 icon={<AiOutlineLink />}
                 label="Copy Link"
                 color="#fff"
@@ -91,7 +91,7 @@ export function Navbar() {
                 onClick={() => setOpenModal(true)}
               >
                 Send
-              </Button>
+              </Button> */}
 
               <Button
                 onClick={toggleColorMode}
@@ -106,8 +106,8 @@ export function Navbar() {
                 )}
               </Button>
 
-              {/* <Button colorScheme="purple">Get Started</Button>
-              <Button variant="outline" colorScheme="purple" rightIcon={<FiLogIn/>}>
+              <Button colorScheme="purple">Get Started</Button>
+              {/* <Button variant="outline" colorScheme="purple" rightIcon={<FiLogIn/>}>
                 <Link to="/login">Sign In</Link>
               </Button> */}
 
