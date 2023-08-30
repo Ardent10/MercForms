@@ -15,7 +15,7 @@ import { PrimaryButton, Selector } from "@modules/common";
 import { InputField } from "@modules/common/Form";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
-import LocationJson from "@utils/SampleData/Location.json";
+import LocationJson from "@utils/SampleData/location.json";
 import { dateTimeFormat } from "../../../utils/helperFunctions/globalDateTimeFormat";
 import { SignupSchema } from "../../../utils/validations/validations";
 import { OAuth } from "../components/OAuth";
