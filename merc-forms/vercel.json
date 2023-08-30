@@ -3,9 +3,10 @@
   "builds": [
     {
       "src": "index.tsx",
-      "use": "@vercel/static-build",
-      "config": { "distDir": "build" }
+      "use": "@vercel/node"
     }
   ],
-  "routes": [{ "src": "/(.*)", "dest": "/index.html" }]
+  "rewrites":  [
+    {"source": "/(.*)", "destination": "/"}
+  ]
 }
