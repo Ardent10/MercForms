@@ -19,8 +19,11 @@ import LocationJson from "@utils/SampleData/location.json";
 import { dateTimeFormat } from "../../../utils/helperFunctions/globalDateTimeFormat";
 import { SignupSchema } from "../../../utils/validations/validations";
 import { OAuth } from "../components/OAuth";
+import { useAuth } from "../hooks";
 
 export function Signup() {
+  const { Signup } = useAuth();
+
   const defaultValues = {
     username: "Zakariya",
     email: "zakariya@mercforms.com",
@@ -39,8 +42,15 @@ export function Signup() {
   });
 
   const onSubmit = handleSubmit(async (data) => {
-    alert(JSON.stringify(data));
-    console.log(data);
+    await Signup({
+      username: data.username,
+      email: data.email,
+      password: data.password,
+      location: data.location,
+      dob: data.dob,
+      firstName: data.firstName,
+      lastName: data.lastName,
+    });
   });
 
   return (

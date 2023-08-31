@@ -5,22 +5,20 @@ import {
   Stack,
   useColorMode,
   useColorModeValue,
-  IconButton,
 } from "@chakra-ui/react";
-
 import { BsFillBrightnessLowFill } from "react-icons/bs";
 import { MdDarkMode } from "react-icons/md";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { Logo } from "../Logo";
 import { ProfileMenu } from "../ProfileMenu";
-import { MdOutlineAttachEmail } from "react-icons/md";
-import { RiSendPlaneFill } from "react-icons/ri";
-import { AiOutlineLink } from "react-icons/ai";
-import { CustomTooltipWithIcon } from "@modules/forms/components/Form/FormBuilder/dragAndDropList";
-import { FiLogIn } from "react-icons/fi";
-import { CustomModal } from "@modules/common";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { SendFormLinkModal } from "@modules/forms/components/Form/FormBuilder/sendFormLink";
+import { useAppState } from "@store/index";
+import { CustomTooltipWithIcon } from "@modules/forms/components/Form/FormBuilder/dragAndDropList";
+import { AiOutlineLink } from "react-icons/ai";
+import { RiSendPlaneFill } from "react-icons/ri";
+import { FiLogIn } from "react-icons/fi";
+import { useAuth } from "@modules/auth/hooks";
 
 interface Props {
   children: React.ReactNode;
@@ -48,6 +46,16 @@ const NavLink = (props: Props) => {
 };
 
 export function Navbar() {
+  const [state] = useAppState();
+  const location = useLocation();
+
+  const { getAccount } = useAuth();
+  console.log(state);
+
+  useEffect(() => {
+    getAccount();
+  }, []);
+
   const { colorMode, toggleColorMode } = useColorMode();
   const [openModal, setOpenModal] = useState(false);
 
@@ -71,27 +79,35 @@ export function Navbar() {
               <Link to="/">
                 <Logo />
               </Link>
-              <NavLink href="#Overview">Overview</NavLink>
-              <NavLink href="#how_it_works">How it works</NavLink>
-              <NavLink href="#feature">Features</NavLink>
+              {location.pathname === "/" && (
+                <>
+                  <NavLink href="#Overview">Overview</NavLink>
+                  <NavLink href="#how_it_works">How it works</NavLink>
+                  <NavLink href="#feature">Features</NavLink>
+                </>
+              )}
             </Stack>
           </Flex>
 
           <Flex alignItems={"center"}>
             <Stack direction={"row"} spacing={7}>
-              {/* <CustomTooltipWithIcon
-                icon={<AiOutlineLink />}
-                label="Copy Link"
-                color="#fff"
-              />
+              {state.userProfile?.id && location.pathname.includes("/forms/create/") && (
+                <>
+                  <CustomTooltipWithIcon
+                    icon={<AiOutlineLink />}
+                    label="Copy Link"
+                    color="#fff"
+                  />
 
-              <Button
-                colorScheme="purple"
-                rightIcon={<RiSendPlaneFill size={17} />}
-                onClick={() => setOpenModal(true)}
-              >
-                Send
-              </Button> */}
+                  <Button
+                    colorScheme="purple"
+                    rightIcon={<RiSendPlaneFill size={17} />}
+                    onClick={() => setOpenModal(true)}
+                  >
+                    Send
+                  </Button>
+                </>
+              )}
 
               <Button
                 onClick={toggleColorMode}
@@ -106,12 +122,20 @@ export function Navbar() {
                 )}
               </Button>
 
-              <Button colorScheme="purple">Get Started</Button>
-              {/* <Button variant="outline" colorScheme="purple" rightIcon={<FiLogIn/>}>
-                <Link to="/login">Sign In</Link>
-              </Button> */}
-
-              <ProfileMenu />
+             {!location.pathname.includes("/forms/create") && <Button colorScheme="purple">
+                <Link to="/forms">Get Started</Link>
+              </Button>}
+              {!state.userProfile?.id ? (
+                <Button
+                  variant="outline"
+                  colorScheme="purple"
+                  rightIcon={<FiLogIn />}
+                >
+                  <Link to="/login">Sign In</Link>
+                </Button>
+              ) : (
+                <ProfileMenu />
+              )}
             </Stack>
           </Flex>
         </Flex>

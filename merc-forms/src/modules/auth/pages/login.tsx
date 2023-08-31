@@ -17,8 +17,10 @@ import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { LoginSchema } from "../../../utils/validations/validations";
 import { OAuth } from "../components/OAuth";
+import { useAuth } from "../hooks";
 
 export function Login() {
+  const { Login } = useAuth();
   const defaultValues = {
     email: "zakariya@mercforms.com",
     password: "Test@123",
@@ -30,8 +32,10 @@ export function Login() {
   });
 
   const onSubmit = handleSubmit(async (data) => {
-    alert(JSON.stringify(data));
-    console.log(data);
+    await Login({
+      email: data.email,
+      password: data.password,
+    });
   });
 
   return (
@@ -105,7 +109,7 @@ export function Login() {
               <Box>
                 <PrimaryButton
                   type="submit"
-                  title="Create Account"
+                  title="Login"
                   width="100%"
                   height={50}
                   fontSize={16}
@@ -113,7 +117,7 @@ export function Login() {
                   borderRadius="10px"
                   padding="0px"
                   borderColor="#6d63fc"
-                  showLoaderonBtn={false}
+                  showLoaderonBtn={true}
                 />
               </Box>
             </SimpleGrid>
@@ -133,15 +137,15 @@ export function Login() {
           src={"/signup-hero.png"}
         />
         <Text
-          position="absolute" // Use absolute positioning
-          bottom={0} // Align at the bottom
-          right={0} // Align at the right
+          position="absolute"
+          bottom={0}
+          right={0}
           fontSize={24}
           fontWeight={900}
           color={"#6d63fc"}
           textAlign="center"
-          padding={4} // Add some padding for spacing
-          backgroundColor="rgba(255, 255, 255, 0.7)" // Add a background color for better visibility>
+          padding={4}
+          backgroundColor="rgba(255, 255, 255, 0.7)"
         >
           MercForms.
         </Text>

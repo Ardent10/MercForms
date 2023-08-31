@@ -53,7 +53,6 @@ export const Forms = () => {
   // Function to create a new form
   const createForm = ({ nestedRoute }: any) => {
     const id = uuid();
-    console.log("Create a new form", id, nestedRoute, navigate);
     navigate(nestedRoute + "/" + id);
   };
 

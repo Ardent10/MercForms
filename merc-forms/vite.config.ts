@@ -10,6 +10,7 @@ export default defineConfig({
       "@modules": resolve(__dirname, "./src/modules"),
       "@common": resolve(__dirname, "./src/modules/common"),
       "@utils": resolve(__dirname, "./src/utils"),
+      "@store": resolve(__dirname, "./src/store"),
     },
   },
   optimizeDeps: {

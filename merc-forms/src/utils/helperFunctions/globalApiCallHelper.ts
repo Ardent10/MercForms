@@ -7,10 +7,15 @@ type GlobalApiCallHelperProps = {
   headers?: Record<string, string>;
 };
 
-const baseURL =
-  process.env.REACT_PUBLIC_API_BASE_URL !== undefined
-    ? process.env.REACT_PUBLIC_API_BASE_URL
-    : "http://localhost:5000/api";
+let baseURL = "";
+
+if (process.env.NODE_ENV === "development") {
+  // Use development base URL
+  baseURL = "http://localhost:5000/api";
+} else {
+  // Use production base URL
+  baseURL = "https://merc-forms-api.vercel.app/api/";
+}
 
 export const globalApiCallHelper = async ({
   api,

@@ -14,7 +14,7 @@ router.post("/register", async (req: Request, res: Response) => {
 
       username,
       email,
-
+      role,
       location,
       dob,
       password,
@@ -41,12 +41,22 @@ router.post("/register", async (req: Request, res: Response) => {
         email,
         location,
         dob,
+        role: role ? role : "user",
         password: hashedPassword,
       });
 
       const savedUser = await newUser.save();
 
-      res.status(201).json(savedUser);
+      res.status(201).json({
+        id: savedUser._id,
+        username: savedUser.username,
+        email: savedUser.email,
+        role: savedUser.role,
+        dob: savedUser.dob,
+        location: savedUser.location,
+        firstName: savedUser.firstName,
+        lastName: savedUser.lastName,
+      });
     }
   } catch (err: any) {
     res.status(500).json(err);
@@ -116,6 +126,5 @@ router.get("/getAccount", async (req: Request, res: Response) => {
     console.log(err);
   }
 });
-
 
 export default router;

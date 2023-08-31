@@ -8,10 +8,20 @@ import {
   MenuDivider,
   MenuItem,
   MenuList,
+  Text,
   useColorModeValue,
 } from "@chakra-ui/react";
+import { useAppState } from "@store/index";
+import { useAuth } from "@modules/auth/hooks";
 
 export function ProfileMenu() {
+  const [state] = useAppState();
+  const { Logout } = useAuth();
+
+  const handleLogout = () => {
+     Logout();
+  }
+
   return (
     <Menu>
       <MenuButton
@@ -42,13 +52,13 @@ export function ProfileMenu() {
         </Center>
         <br />
         <Center>
-          <p>Username</p>
+          <Text>{state.userProfile?.username}</Text>
         </Center>
         <br />
         <MenuDivider />
-        <MenuItem>Your Servers</MenuItem>
+        <MenuItem>Your Forms</MenuItem>
         <MenuItem>Account Settings</MenuItem>
-        <MenuItem>Logout</MenuItem>
+        <MenuItem onClick={handleLogout}>Logout</MenuItem>
       </MenuList>
     </Menu>
   );

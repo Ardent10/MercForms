@@ -1,6 +1,7 @@
 import { Button, CircularProgress } from "@chakra-ui/react";
 import { ReactNode, useEffect, useState } from "react";
 import { Styles } from "./index.styles";
+import { useAppState } from "@store/index";
 
 interface props {
   title: string;
@@ -26,6 +27,7 @@ interface props {
 }
 
 export function PrimaryButton(props: props) {
+  const [state] = useAppState();
   const [isLoading, setIsLoading] = useState(false);
   const sxStylesprops = {
     width: props.width,
@@ -43,9 +45,9 @@ export function PrimaryButton(props: props) {
   };
   const styles = Styles(sxStylesprops);
 
-  // useEffect(() => {
-  //   setIsLoading(state?.isLoading ? state?.isLoading : false);
-  // }, [state?.isLoading]);
+  useEffect(() => {
+    setIsLoading(state?.isLoading ? state?.isLoading : false);
+  }, [state?.isLoading]);
 
   return (
     <Button
@@ -55,16 +57,11 @@ export function PrimaryButton(props: props) {
       variant="contained"
       disabled={props.disabled || isLoading}
       sx={styles.buttonStyle}
+      isLoading={isLoading}
     >
       <>
-        {props?.showLoaderonBtn && isLoading ? (
-          <CircularProgress size={20} color="#FFF" isIndeterminate />
-        ) : (
-          <>
-            {props.buttonChild && props.buttonChild}
-            {props.title}
-          </>
-        )}
+        {props.buttonChild && props.buttonChild}
+        {props.title}
       </>
     </Button>
   );
