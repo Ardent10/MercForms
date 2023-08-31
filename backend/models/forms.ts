@@ -7,6 +7,7 @@ export interface IChoice extends Document {
 
 export interface IQuestion extends Document {
   questionText: string;
+  questionImageUrl?: string;
   answerType: string;
   paragraphAnswer?: string;
   isRequired: boolean;

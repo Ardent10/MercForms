@@ -11,7 +11,7 @@ import { MdDarkMode } from "react-icons/md";
 import { Link, useLocation } from "react-router-dom";
 import { Logo } from "../Logo";
 import { ProfileMenu } from "../ProfileMenu";
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import { SendFormLinkModal } from "@modules/forms/components/Form/FormBuilder/sendFormLink";
 import { useAppState } from "@store/index";
 import { CustomTooltipWithIcon } from "@modules/forms/components/Form/FormBuilder/dragAndDropList";
@@ -50,11 +50,16 @@ export function Navbar() {
   const location = useLocation();
 
   const { getAccount } = useAuth();
-  console.log(state);
+  // console.log(state);
 
   useEffect(() => {
-    getAccount();
-  }, []);
+    const getCurrentAccount = async () => {
+      await getAccount();
+    };
+    if (!state.userProfile?.id) {
+      getCurrentAccount();
+    }
+  }, [state.userProfile?.id]);
 
   const { colorMode, toggleColorMode } = useColorMode();
   const [openModal, setOpenModal] = useState(false);
@@ -91,23 +96,24 @@ export function Navbar() {
 
           <Flex alignItems={"center"}>
             <Stack direction={"row"} spacing={7}>
-              {state.userProfile?.id && location.pathname.includes("/forms/create/") && (
-                <>
-                  <CustomTooltipWithIcon
-                    icon={<AiOutlineLink />}
-                    label="Copy Link"
-                    color="#fff"
-                  />
+              {state.userProfile?.id &&
+                location.pathname.includes("/forms/create/") && (
+                  <>
+                    <CustomTooltipWithIcon
+                      icon={<AiOutlineLink />}
+                      label="Copy Link"
+                      color="#fff"
+                    />
 
-                  <Button
-                    colorScheme="purple"
-                    rightIcon={<RiSendPlaneFill size={17} />}
-                    onClick={() => setOpenModal(true)}
-                  >
-                    Send
-                  </Button>
-                </>
-              )}
+                    <Button
+                      colorScheme="purple"
+                      rightIcon={<RiSendPlaneFill size={17} />}
+                      onClick={() => setOpenModal(true)}
+                    >
+                      Send
+                    </Button>
+                  </>
+                )}
 
               <Button
                 onClick={toggleColorMode}
@@ -122,9 +128,11 @@ export function Navbar() {
                 )}
               </Button>
 
-             {!location.pathname.includes("/forms/create") && <Button colorScheme="purple">
-                <Link to="/forms">Get Started</Link>
-              </Button>}
+              {!location.pathname.includes("/forms/create") && (
+                <Button colorScheme="purple">
+                  <Link to="/forms">Get Started</Link>
+                </Button>
+              )}
               {!state.userProfile?.id ? (
                 <Button
                   variant="outline"

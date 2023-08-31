@@ -8,13 +8,25 @@ import { SendFormInviteTemplate } from "../utils/sendFormInvite";
 
 const router: Router = Router();
 
+// Get all forms
+router.get("/getAllforms", async (req, res) => {
+  try {
+    const forms = await FormModel.find({
+      userId: req.query.userId,
+    });
+    res.json(forms);
+  } catch (error) {
+    res.status(500).json({ error: "Could not retrieve forms" });
+  }
+});
 // Create
-router.post("/forms", async (req, res) => {
+router.post("/create", async (req, res) => {
   try {
     const newForm = new FormModel(req.body);
     const savedForm = await newForm.save();
     res.status(201).json(savedForm);
   } catch (error) {
+    console.error("Error creating form:", error);
     res.status(500).json({ error: "Could not create form" });
   }
 });

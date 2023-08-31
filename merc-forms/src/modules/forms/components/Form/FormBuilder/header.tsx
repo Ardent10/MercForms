@@ -1,41 +1,6 @@
-import {
-  Accordion,
-  AccordionButton,
-  AccordionIcon,
-  AccordionItem,
-  AccordionPanel,
-  Box,
-  Button,
-  Container,
-  Divider,
-  Flex,
-  FormLabel,
-  IconButton,
-  Radio,
-  Stack,
-  Switch,
-  Tag,
-  TagLabel,
-  TagRightIcon,
-  Text,
-  useColorModeValue,
-} from "@chakra-ui/react";
-import { useState } from "react";
-import { FaRegTrashAlt } from "react-icons/fa";
-import { HiOutlinePhoto } from "react-icons/hi2";
-import { MdContentCopy } from "react-icons/md";
-
-import { AiFillEye } from "react-icons/ai";
-import { BsTextParagraph } from "react-icons/bs";
-import { ImCheckboxChecked } from "react-icons/im";
-import { IoMdRadioButtonOn } from "react-icons/io";
-
-import { CutsomTooltip, Selector } from "@modules/common";
+import { Stack } from "@chakra-ui/react";
 import { InputField } from "@modules/common/Form";
 import { TextAreaInput } from "@modules/common/Form/textAreaInput";
-import { Controller, useFieldArray, useForm } from "react-hook-form";
-import { ChoicesForm } from "./choicesForm";
-import { Styles } from "./index.styles";
 
 interface IFormHeaderProps {
   control: any;
@@ -72,7 +37,7 @@ export const FormHeader = ({ control, textColor, bgColor}:IFormHeaderProps) => {
         }}
       />
       <TextAreaInput
-        name="paragraph_answer"
+        name="form_description"
         control={control}
         placeholder="Untitled Description"
         size="lg"

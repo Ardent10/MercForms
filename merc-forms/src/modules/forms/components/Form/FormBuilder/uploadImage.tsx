@@ -18,6 +18,19 @@ interface props {
   setValue: any;
 }
 
+function ConvertImageToBase64(file: any) {
+  return new Promise((resolve, reject) => {
+    const fileReader = new FileReader();
+    fileReader.readAsDataURL(file);
+    fileReader.onload = () => {
+      resolve(fileReader.result);
+    };
+    fileReader.onerror = (error) => {
+      reject(error);
+    };
+  });
+}
+
 export function UploadImage({ control, name, setOpenModal, setValue }: props) {
   const [selectedFilePath, setSelectedFilePath] = useState<string[]>([]);
   const [fileSizeErrorMsg, setFileSizeErrorMsg] = useState<string>("");
@@ -76,9 +89,10 @@ export function UploadImage({ control, name, setOpenModal, setValue }: props) {
     ]);
   };
 
-  const handleUpload = () => {
+  const handleUpload = async() => {
     if (fileTaken.length !== 0) {
-      setValue(name, fileTaken);
+      const base64 = await ConvertImageToBase64(fileTaken[0]);
+      setValue(name, base64);
 
       setOpenModal(false);
 

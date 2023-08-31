@@ -46,6 +46,8 @@ import { HiOutlinePhoto } from "react-icons/hi2";
 import { ImCheckboxChecked } from "react-icons/im";
 import { IoMdRadioButtonOn } from "react-icons/io";
 import { MdContentCopy, MdDragIndicator } from "react-icons/md";
+import { CustomModal } from "@modules/common";
+import { UploadImage } from "./uploadImage";
 
 const QuestionType = [
   {
@@ -138,19 +140,21 @@ export const DragAndDropList = ({
     <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
       <SortableContext items={fields} strategy={verticalListSortingStrategy}>
         {fields.map((question: any, questionIndex: any) => (
-          <SortableAccordionItem
-            id={question.id}
-            key={question.id}
-            question={question}
-            questionIndex={questionIndex}
-            remove={remove}
-            bgColor={bgColor}
-            textColor={textColor}
-            control={control}
-            watchAllFields={watchAllFields}
-            append={append}
-            setValue={setValue}
-          />
+          <div key={questionIndex}>
+            <SortableAccordionItem
+              id={question.id}
+              key={question.id}
+              question={question}
+              questionIndex={questionIndex}
+              remove={remove}
+              bgColor={bgColor}
+              textColor={textColor}
+              control={control}
+              watchAllFields={watchAllFields}
+              append={append}
+              setValue={setValue}
+            />
+          </div>
         ))}
       </SortableContext>
     </DndContext>
@@ -183,6 +187,7 @@ const SortableAccordionItem = ({
   setValue,
 }: ISortableAccordionItemProps) => {
   const [answerType, setAnswerType] = useState("Multiple Choice");
+  const [openModal, setOpenModal] = useState(false);
 
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id });
@@ -201,6 +206,21 @@ const SortableAccordionItem = ({
       border="none"
       sx={dndStyles}
     >
+      {/* Modal for Image selection for the Question */}
+      <CustomModal
+        isOpen={openModal}
+        onClose={() => setOpenModal(false)}
+        title="Upload Image"
+        size="xl"
+      >
+        <UploadImage
+          control={control}
+          name={`questions[${questionIndex}].questionImageUrl`}
+          setOpenModal={setOpenModal}
+          setValue={setValue}
+        />
+      </CustomModal>
+
       <Stack mt={5} rounded={"2xl"} bg={bgColor} key={id}>
         <AccordionButton
           id="question_preview"
@@ -235,6 +255,7 @@ const SortableAccordionItem = ({
               <Text id="question" fontSize={"lg"} color={textColor}>
                 {watchAllFields.questions[questionIndex].questionText}
               </Text>
+
               <Tag
                 size={"md"}
                 borderRadius="full"
@@ -244,6 +265,18 @@ const SortableAccordionItem = ({
                 <TagLabel>Preview</TagLabel>
                 <TagRightIcon as={AiFillEye} />
               </Tag>
+            </Box>
+            <Box display={"flex"} justifyContent={"center"}>
+              {watchAllFields.questions[questionIndex]?.questionImageUrl && (
+                <img
+                  src={
+                    watchAllFields.questions[questionIndex]?.questionImageUrl
+                  }
+                  width={"250px"}
+                  style={{ borderRadius: "10px" }}
+                  alt="option-image"
+                />
+              )}
             </Box>
 
             {/* Question Choices preview section */}
@@ -264,20 +297,18 @@ const SortableAccordionItem = ({
                       <Box display={"flex"} justifyContent={"center"} p={3}>
                         {watchAllFields.questions[questionIndex]?.choices[
                           choiceIndex
-                        ]?.imageUrl &&
-                          watchAllFields.questions[questionIndex].choices[
-                            choiceIndex
-                          ]?.imageUrl[0] && (
-                            <img
-                              src={URL.createObjectURL(
-                                watchAllFields.questions[questionIndex].choices[
-                                  choiceIndex
-                                ].imageUrl[0]
-                              )}
-                              width={"180px"}
-                              alt="option-image"
-                            />
-                          )}
+                        ]?.imageUrl && (
+                          <img
+                            src={
+                              watchAllFields.questions[questionIndex].choices[
+                                choiceIndex
+                              ].imageUrl
+                            }
+                            width={"180px"}
+                            style={{ borderRadius: "10px" }}
+                            alt="option-image"
+                          />
+                        )}
                       </Box>
                     </Box>
                   ) : watchAllFields.questions[questionIndex].answerType ===
@@ -321,7 +352,9 @@ const SortableAccordionItem = ({
                   icon={<HiOutlinePhoto />}
                   label="Add Image"
                   color="#fff"
+                  onClick={() => setOpenModal(true)}
                 />
+
                 <Box flex={1} pl={2}>
                   <Selector
                     name={`questions[${questionIndex}].answerType`}

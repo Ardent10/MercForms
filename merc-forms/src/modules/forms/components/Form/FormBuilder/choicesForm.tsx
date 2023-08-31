@@ -102,19 +102,18 @@ export const ChoicesForm = ({
                           </Box>
 
                           {questionsList[questionIndex]?.choices[choiceIndex]
-                            ?.imageUrl &&
-                            questionsList[questionIndex].choices[choiceIndex]
-                              ?.imageUrl[0] && (
-                              <img
-                                src={URL.createObjectURL(
-                                  questionsList[questionIndex].choices[
-                                    choiceIndex
-                                  ].imageUrl[0]
-                                )}
-                                width={"180px"}
-                                alt="option-image"
-                              />
-                            )}
+                            ?.imageUrl && (
+                            <img
+                              src={
+                                questionsList[questionIndex].choices[
+                                  choiceIndex
+                                ].imageUrl
+                              }
+                              width={"180px"}
+                              style={{ borderRadius: "10px" }}
+                              alt="option-image"
+                            />
+                          )}
                         </Box>
                         <CustomTooltipWithIcon
                           icon={<HiOutlinePhoto />}
@@ -164,19 +163,18 @@ export const ChoicesForm = ({
                           </Box>
                           <Box>
                             {questionsList[questionIndex]?.choices[choiceIndex]
-                              ?.imageUrl &&
-                              questionsList[questionIndex].choices[choiceIndex]
-                                ?.imageUrl[0] && (
-                                <img
-                                  src={URL.createObjectURL(
-                                    questionsList[questionIndex].choices[
-                                      choiceIndex
-                                    ].imageUrl[0]
-                                  )}
-                                  width={"180px"}
-                                  alt="option-image"
-                                />
-                              )}
+                              ?.imageUrl && (
+                              <img
+                                src={
+                                  questionsList[questionIndex].choices[
+                                    choiceIndex
+                                  ].imageUrl
+                                }
+                                width={"180px"}
+                                style={{ borderRadius: "10px" }}
+                                alt="option-image"
+                              />
+                            )}
                           </Box>
                         </Box>
                       </GridItem>
@@ -208,7 +206,7 @@ export const ChoicesForm = ({
                   colorScheme="purple"
                   onClick={() => {
                     append({
-                      choiceText: `Option ${fields.length + 1}`,
+                      choiceText: "",
                     });
                   }}
                 >
