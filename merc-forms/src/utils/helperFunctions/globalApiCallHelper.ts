@@ -14,7 +14,7 @@ if (process.env.NODE_ENV === "development") {
   baseURL = "http://localhost:5000/api";
 } else {
   // Use production base URL
-  baseURL = "https://merc-forms-api.vercel.app/api/";
+  baseURL = "https://merc-forms-api.vercel.app/api";
 }
 
 export const globalApiCallHelper = async ({
