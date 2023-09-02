@@ -67,7 +67,7 @@ export function Navbar() {
   return (
     <>
       {openModal && (
-        <SendFormLinkModal openModal={openModal} setOpenModal={setOpenModal} />
+        <SendFormLinkModal openModal={openModal} setOpenModal={setOpenModal} formUrl="" />
       )}
       <Box
         zIndex={999}
