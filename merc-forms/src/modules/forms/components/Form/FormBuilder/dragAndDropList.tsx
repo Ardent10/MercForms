@@ -283,6 +283,7 @@ const SortableAccordionItem = ({
             <Stack pt={5} id="question_choices" maxW={"sm"}>
               {watchAllFields.questions[questionIndex].choices.map(
                 (choice: any, choiceIndex: any) =>
+                // Checking different types of Answer type to render different components
                   watchAllFields.questions[questionIndex].answerType ===
                   "Multiple Choice" ? (
                     <Box display={"flex"} flexDirection={"column"}>

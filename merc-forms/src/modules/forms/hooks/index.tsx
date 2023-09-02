@@ -84,6 +84,41 @@ export function useForms() {
     }
   };
 
+  const createFormResponse = async (formResponse:any)=>{
+    try {
+
+      const savedFormResponse = await globalApiCallHelper({
+        api: "/forms/save-response",
+        method: "POST",
+        body: JSON.stringify({ userId: state.userProfile.id, ...formResponse }),
+      });
+
+      if (savedFormResponse) {
+        toast({
+          title: "Form Response Saved",
+          description: "Your response has been saved successfully",
+          status: "success",
+          position: "top-right",
+          duration: 5000,
+          isClosable: true,
+        });
+        navigate("/forms");
+      } else {
+        toast({
+          title: "Form response failed",
+          description: "Your form response could not be saved",
+          status: "error",
+          position: "top-right",
+          duration: 5000,
+          isClosable: true,
+        });
+      }
+      
+    } catch (error) {
+      console.log("Create Form Response: ",error)
+    }
+  }
+
   // Function to update a form
   const updateForm = async (id: string, updatedForm: FormValues) => {
     try {
@@ -122,5 +157,6 @@ export function useForms() {
     createForm,
     updateForm,
     deleteForm,
+    createFormResponse,
   };
 }

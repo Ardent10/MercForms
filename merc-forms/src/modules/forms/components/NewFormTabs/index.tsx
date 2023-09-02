@@ -7,7 +7,7 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { FormBuilder as FormQuestionTab } from "../Form/FormBuilder";
-import { ResponseTab } from "../Form/FormResponses";
+import { ResponseTab } from "../Form/FormResponses/responseTab";
 
 export const NewFormsTabs = () => {
   const tabSelectedColor = useColorModeValue("#6d63fc", "white");

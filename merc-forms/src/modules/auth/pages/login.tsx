@@ -1,5 +1,3 @@
-"use client";
-
 import {
   Box,
   Checkbox,
@@ -22,7 +20,7 @@ import { useAuth } from "../hooks";
 export function Login() {
   const { Login } = useAuth();
   const defaultValues = {
-    email: "zakariya@mercforms.com",
+    email: "john@mercforms.com",
     password: "Test@123",
   };
 

@@ -1,8 +1,6 @@
-import bcrypt from "bcryptjs";
-import { Request, Response, Router } from "express";
-import User, { IUser } from "../models/user";
-import { verifyTokenAndAuthorization } from "../utils/verifyToken";
+import { Router } from "express";
 import FormModel from "../models/forms";
+import FormResponseModel from "../models/formResponse";
 import { transporter, mailOptions } from "../utils/nodeMailer";
 import { SendFormInviteTemplate } from "../utils/sendFormInvite";
 
@@ -30,6 +28,18 @@ router.post("/create", async (req, res) => {
     res.status(500).json({ error: "Could not create form" });
   }
 });
+
+// Save form response
+router.post("/save-response", async (req,res)=>{
+  try {
+    const newFormResponse = new FormResponseModel(req.body);
+    const savedFormResponse = await newFormResponse.save();
+    res.status(201).json(savedFormResponse);
+
+  } catch (error) {
+    res.status(500).json({ error: "There was an error while saving the form" });
+  }
+}) 
 
 // Send form link invite via email
 router.post("/form-invite", async (req, res) => {
@@ -64,6 +74,7 @@ router.post("/form-invite", async (req, res) => {
   }
 });
 
+// Get a particular form
 router.get("/forms/:id", async (req, res) => {
   try {
     const form = await FormModel.findById(req.params.id);
@@ -77,6 +88,7 @@ router.get("/forms/:id", async (req, res) => {
   }
 });
 
+// Update a form
 router.put("/forms/:id", async (req, res) => {
   try {
     const updatedForm = await FormModel.findByIdAndUpdate(

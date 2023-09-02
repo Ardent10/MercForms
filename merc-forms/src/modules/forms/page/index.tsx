@@ -52,7 +52,7 @@ export const Forms = () => {
   const navigate = useNavigate();
   const { fetchAllForms } = useForms();
   const [state, dispatch] = useAppState();
-  console.log(state);
+  // console.log(state);
 
   // Check if the current route is the Forms page ("/forms")
   const isFormsPage = location.pathname === "/forms";
@@ -60,7 +60,6 @@ export const Forms = () => {
   useEffect(() => {
     const getAllForms = async () => {
       const res = await fetchAllForms();
-      console.log("ALL FORMS", res);
     };
     if (state?.userProfile?.id) {
       getAllForms();
@@ -70,7 +69,11 @@ export const Forms = () => {
   // Function to create a new form
   const createForm = ({ nestedRoute }: any) => {
     const id = uuid();
-    navigate(nestedRoute + "/" + id);
+    if (nestedRoute.includes("forms-response")) {
+      navigate(nestedRoute);
+    } else {
+      navigate(nestedRoute + "/" + id);
+    }
   };
 
   return (
@@ -109,7 +112,6 @@ export const Forms = () => {
 
               <SimpleGrid column={4} minChildWidth="180px" spacing="40px">
                 {templates.map((template, id) => (
-                  // <Link to={template.link} key={template.id}>
                   <Box key={id}>
                     <CutsomTooltip
                       label={template.title}
@@ -165,9 +167,9 @@ export const Forms = () => {
               </Heading>
 
               <Divider />
+
               <SimpleGrid column={4} minChildWidth="180px" spacing="40px">
                 {state?.allForms?.map((form: any, id: number) => (
-                  
                   <Box key={form._id}>
                     <CutsomTooltip
                       label={form.form_title}
@@ -176,7 +178,9 @@ export const Forms = () => {
                     >
                       <Box
                         onClick={() =>
-                          createForm({ nestedRoute: form._id })
+                          createForm({
+                            nestedRoute: `forms-response/${form._id}`,
+                          })
                         }
                         cursor="pointer"
                         display="flex"
@@ -200,8 +204,10 @@ export const Forms = () => {
                         />
                       </Box>
                     </CutsomTooltip>
+                    <Text color={"#000"} fontSize={"md"} p={2} fontWeight={600}>
+                      {form.form_title}
+                    </Text>
                   </Box>
-                 
                 ))}
               </SimpleGrid>
             </Stack>

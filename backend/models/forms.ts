@@ -23,12 +23,12 @@ export interface IForm extends Document {
   updatedAt: Date;
 }
 
-const choiceSchema: Schema<IChoice> = new mongoose.Schema({
+export const choiceSchema: Schema<IChoice> = new mongoose.Schema({
   choiceText: String,
   imageUrl: String,
 });
 
-const questionSchema: Schema<IQuestion> = new mongoose.Schema({
+export const questionSchema: Schema<IQuestion> = new mongoose.Schema({
   questionText: String,
   answerType: String,
   paragraphAnswer: String,

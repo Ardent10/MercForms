@@ -69,13 +69,14 @@ export const InputField = ({
   return (
     <Controller
       name={name}
+      // defaultValue={""}
       control={control}
       render={({
         field: { onChange, onBlur, value, ref },
         fieldState: { isTouched, error },
       }) => {
         return (
-          <Grid templateColumns={"repeat(1, 1fr)"} gap={2} w={'full'}>
+          <Grid templateColumns={"repeat(1, 1fr)"} gap={2} w={"full"}>
             <InputHeading
               label={inputHeadingLabel || ""}
               inputHeadingType={inputHeadingType}
@@ -102,7 +103,7 @@ export const InputField = ({
                       : type
                   }
                   disabled={disable}
-                  value={value}
+                  value={value ? value : ""}
                   onBlur={onBlur}
                   onChange={onChange}
                   ref={ref}

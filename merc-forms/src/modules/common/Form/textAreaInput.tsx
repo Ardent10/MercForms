@@ -10,6 +10,7 @@ interface Props {
   minRows?: number;
   size: "md" | "lg" | "xl";
   rest?: any;
+  onBlur?:any;
 }
 
 export function TextAreaInput({
@@ -21,6 +22,7 @@ export function TextAreaInput({
   placeholder,
   size,
   rest,
+  onBlur,
 }: Props) {
   return (
     <Controller
@@ -31,6 +33,7 @@ export function TextAreaInput({
           <>
             <Textarea
               {...field}
+              onBlur={onBlur}
               value={field.value || ""}
               minH={minRows ? `${minRows * 2}rem` : "5rem"}
               isDisabled={disable}

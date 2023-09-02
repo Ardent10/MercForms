@@ -11,10 +11,11 @@ interface IFormHeaderProps {
 export const FormHeader = ({ control, textColor, bgColor}:IFormHeaderProps) => {
   return (
     <Stack
-      id='form_header'
+      id="form_header"
       mt={5}
       borderTop={"10px solid #6d63fc"}
       rounded={"2xl"}
+      shadow={"xl"}
       p={5}
       w={"50vw"}
       bg={bgColor}
