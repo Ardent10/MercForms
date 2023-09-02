@@ -40,7 +40,7 @@ export function useAuth() {
       });
 
       const res = await globalApiCallHelper({
-        api:"/auth/register",
+        api: "/auth/register",
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -113,7 +113,6 @@ export function useAuth() {
         }),
       });
 
-      console.log("Login res", res);
 
       if (res._doc) {
         localStorage.setItem("auth_token", res.accessToken);
@@ -174,32 +173,33 @@ export function useAuth() {
 
       if (!authToken) {
         console.log("Access token not found.");
-      }
-
-      const res = await globalApiCallHelper({
-        api: "/auth/getAccount",
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${authToken}`,
-          "Content-Type": "application/json",
-        },
-      });
-
-      if (res?._id) {
-        dispatch({
-          type: "setUserProfile",
-          payload: {
-            firstName: res.firstName,
-            lastName: res.lastName,
-            email: res.email,
-            username: res.username,
-            location: res.location,
-            dob: res.dob,
-            id: res._id,
+        navigate("/login");
+      } else {
+        const res = await globalApiCallHelper({
+          api: "/auth/getAccount",
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+            "Content-Type": "application/json",
           },
         });
-      } else {
-        navigate("/login");
+
+        if (res?._id) {
+          dispatch({
+            type: "setUserProfile",
+            payload: {
+              firstName: res.firstName,
+              lastName: res.lastName,
+              email: res.email,
+              username: res.username,
+              location: res.location,
+              dob: res.dob,
+              id: res._id,
+            },
+          });
+        } else {
+          navigate("/login");
+        }
       }
     } catch (error) {
       console.log("Get Account ERROR: ", error);

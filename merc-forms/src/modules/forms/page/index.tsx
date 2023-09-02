@@ -7,6 +7,8 @@ import {
   SimpleGrid,
   Stack,
   Text,
+  VStack,
+  useToast,
 } from "@chakra-ui/react";
 import { CutsomTooltip, Layout, Navbar } from "@modules/common";
 import { useAppState } from "@store/index";
@@ -14,7 +16,12 @@ import { HiDocumentPlus } from "react-icons/hi2";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { v4 as uuid } from "uuid";
 import { useForms } from "../hooks";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { Loader } from "@modules/common";
+import { CustomTooltipWithIcon } from "../components/Form/FormBuilder/dragAndDropList";
+import { AiOutlineLink } from "react-icons/ai";
+import { RiSendPlaneFill } from "react-icons/ri";
+import { SendFormLinkModal } from "../components/Form/FormBuilder/sendFormLink";
 
 const templates = [
   {
@@ -52,7 +59,9 @@ export const Forms = () => {
   const navigate = useNavigate();
   const { fetchAllForms } = useForms();
   const [state, dispatch] = useAppState();
-  // console.log(state);
+  const [openModal, setOpenModal] = useState(false);
+  const [sendFormUrl, setSendFormUrl] = useState("");
+  const toast = useToast();
 
   // Check if the current route is the Forms page ("/forms")
   const isFormsPage = location.pathname === "/forms";
@@ -76,12 +85,34 @@ export const Forms = () => {
     }
   };
 
+  const handleCopyLinkToClipboard = (e:Event,formId: string) => {
+    e.stopPropagation();
+    navigator.clipboard.writeText(
+      `${window.location.origin}/forms/forms-response/${formId}`
+    );
+    toast({
+      title: "Link Copied",
+      description: "Link copied to clipboard",
+      status: "success",
+      position: "top-right",
+      duration: 5000,
+      isClosable: true,
+    });
+  };
+
   return (
     <>
       <Navbar />
       <Outlet />
       {isFormsPage && (
         <Layout>
+          {openModal && (
+            <SendFormLinkModal
+              openModal={openModal}
+              setOpenModal={setOpenModal}
+              formUrl={sendFormUrl}
+            />
+          )}
           <Container maxW={"5xl"}>
             <Stack
               textAlign={"center"}
@@ -112,7 +143,7 @@ export const Forms = () => {
 
               <SimpleGrid column={4} minChildWidth="180px" spacing="40px">
                 {templates.map((template, id) => (
-                  <Box key={id}>
+                  <Box key={id} position={"relative"}>
                     <CutsomTooltip
                       label={template.title}
                       placement={"top"}
@@ -167,15 +198,16 @@ export const Forms = () => {
               </Heading>
 
               <Divider />
-
-              <SimpleGrid column={4} minChildWidth="180px" spacing="40px">
-                {state?.allForms?.map((form: any, id: number) => (
-                  <Box key={form._id}>
-                    <CutsomTooltip
-                      label={form.form_title}
-                      placement={"top"}
-                      color="white"
-                    >
+              {state.allForms === null ? (
+                <Loader />
+              ) : state.allForms.length === 0 ? (
+                <Text textAlign="center" fontSize="lg">
+                  No Forms Created Yet
+                </Text>
+              ) : (
+                <SimpleGrid column={4} minChildWidth="180px" spacing="40px">
+                  {state?.allForms?.map((form: any, id: number) => (
+                    <Box key={form._id} position={"relative"}>
                       <Box
                         onClick={() =>
                           createForm({
@@ -202,14 +234,42 @@ export const Forms = () => {
                           borderRadius="10px"
                           h={"100%"}
                         />
+                        <VStack position={"absolute"} right={5} bottom={5}>
+                          <CustomTooltipWithIcon
+                            icon={<AiOutlineLink size={"15"} />}
+                            label="Copy Link"
+                            color="#fff"
+                            rest={{ size: "sm" }}
+                            onClick={(e: Event) => handleCopyLinkToClipboard(e,form._id)}
+                          />
+                          <CustomTooltipWithIcon
+                            icon={<RiSendPlaneFill size={"15"} />}
+                            label="Send"
+                            color="#fff"
+                            rest={{ size: "sm" }}
+                            onClick={(e: Event) => {
+                              e.stopPropagation();
+                              setOpenModal(true);
+                              setSendFormUrl(
+                                `${window.location.origin}/forms/forms-response/${form._id}`
+                              );
+                            }}
+                          />
+                        </VStack>
                       </Box>
-                    </CutsomTooltip>
-                    <Text color={"#000"} fontSize={"md"} p={2} fontWeight={600}>
-                      {form.form_title}
-                    </Text>
-                  </Box>
-                ))}
-              </SimpleGrid>
+
+                      <Text
+                        color={"#000"}
+                        fontSize={"md"}
+                        p={2}
+                        fontWeight={600}
+                      >
+                        {form.form_title}
+                      </Text>
+                    </Box>
+                  ))}
+                </SimpleGrid>
+              )}
             </Stack>
           </Container>
         </Layout>

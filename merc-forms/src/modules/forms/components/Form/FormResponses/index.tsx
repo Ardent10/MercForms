@@ -28,7 +28,7 @@ type FormResponseValues = {
 };
 
 export const FormResponse = ({ currentForm }: any) => {
-  const [testForm, setTestForm] = useState<any>(null);
+  const [responseForm, setResponseForm] = useState<any>(null);
   const [answers, setAnswers] = useState<any[]>([]);
   const { createFormResponse } = useForms();
   const toast = useToast();
@@ -39,7 +39,7 @@ export const FormResponse = ({ currentForm }: any) => {
     mode: "onBlur",
   });
   useEffect(() => {
-    setTestForm(currentForm);
+    setResponseForm(currentForm);
 
     if (currentForm) {
       const formValues = {
@@ -110,14 +110,14 @@ export const FormResponse = ({ currentForm }: any) => {
       bgRepeat={"no-repeat"}
       position={"relative"}
     >
-      {!testForm || testForm?.length === 0 ? (
+      {!responseForm || responseForm?.length === 0 ? (
         <Loader />
       ) : (
         <form onSubmit={onSubmit}>
           <VStack>
             <FormResponseHeader
-              formTitle={testForm?.form_title}
-              formDescription={testForm?.form_description}
+              formTitle={responseForm?.form_title}
+              formDescription={responseForm?.form_description}
               bgColor={bgColor}
             />
 
@@ -138,7 +138,7 @@ export const FormResponse = ({ currentForm }: any) => {
                 bgColor={bgColor}
                 setAnswers={setAnswers}
                 answers={answers}
-                questionsArray={testForm?.questions}
+                questionsArray={responseForm?.questions}
               />
 
               <Flex

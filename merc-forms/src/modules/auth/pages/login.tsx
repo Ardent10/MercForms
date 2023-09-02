@@ -12,17 +12,28 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { InputField } from "@modules/common/Form";
 import { PrimaryButton } from "@modules/common/PrimaryButton";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { LoginSchema } from "../../../utils/validations/validations";
 import { OAuth } from "../components/OAuth";
 import { useAuth } from "../hooks";
+import { useAppState } from "@store/index";
+import { useEffect } from "react";
 
 export function Login() {
   const { Login } = useAuth();
+  const [state] = useAppState();
+  const navigate  = useNavigate();
   const defaultValues = {
     email: "john@mercforms.com",
     password: "Test@123",
   };
+
+
+  useEffect(() => {
+    if (!state.userProfile?.id) {
+      navigate("/login");
+    }
+  }, [state.userProfile?.id]);
 
   const { handleSubmit, control } = useForm({
     defaultValues,

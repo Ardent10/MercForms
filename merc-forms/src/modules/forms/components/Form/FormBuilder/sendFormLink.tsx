@@ -6,13 +6,22 @@ import { CustomModal } from "@modules/common";
 import { TextAreaInput } from "@modules/common/Form/textAreaInput";
 import { SendFormLinkSchema } from "@utils/validations/validations";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useForms } from "@modules/forms/hooks/index";
+import { useState } from "react";  
 
 interface props {
   openModal: boolean;
   setOpenModal: any;
+  formUrl: string;
 }
 
-export const SendFormLinkModal = ({ openModal, setOpenModal }: props) => {
+export const SendFormLinkModal = ({
+  openModal,
+  setOpenModal,
+  formUrl,
+}: props) => {
+  const { sendFormInvite } = useForms();
+  const [isLoading, setIsLoading] = useState(false);
   const { handleSubmit, control, watch } = useForm({
     resolver: yupResolver(SendFormLinkSchema),
     defaultValues: {
@@ -21,7 +30,15 @@ export const SendFormLinkModal = ({ openModal, setOpenModal }: props) => {
     },
   });
 
-  const onSubmit = handleSubmit((formaData) => console.log(formaData));
+
+  const onSubmit = handleSubmit(async (formaData) => {
+    const { reciever_email, subject, message } = formaData;
+    setIsLoading(true); 
+    await sendFormInvite(formUrl, reciever_email, subject, message);
+    setIsLoading(false); 
+
+    !isLoading && setOpenModal(false);
+  });
 
   return (
     <CustomModal
@@ -31,11 +48,7 @@ export const SendFormLinkModal = ({ openModal, setOpenModal }: props) => {
       size="lg"
     >
       <Divider />
-      <Container
-        py={5}
-        bgImage={"/assets/features/feature4.svg"}
-        bgSize={"cover"}
-      >
+      <Container py={5}>
         <Stack>
           <form onSubmit={onSubmit}>
             <Container>
@@ -73,8 +86,8 @@ export const SendFormLinkModal = ({ openModal, setOpenModal }: props) => {
                   mt={3}
                   colorScheme="purple"
                   type="submit"
-                  // isLoading
-                  // loadingText="Submitting"
+                  isLoading={isLoading}
+                  loadingText="Submitting"
                 >
                   Send
                 </Button>

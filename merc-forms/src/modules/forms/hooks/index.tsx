@@ -29,11 +29,10 @@ export function useForms() {
   // Function to fetch all forms
   const fetchAllForms = async () => {
     try {
-       const userId = state?.userProfile?.id;
+      const userId = state?.userProfile?.id;
       const data = await globalApiCallHelper({
         api: `/forms/getAllforms/?userId=${userId}`,
         method: "GET",
-       
       });
 
       if (data.length > 0) {
@@ -84,9 +83,8 @@ export function useForms() {
     }
   };
 
-  const createFormResponse = async (formResponse:any)=>{
+  const createFormResponse = async (formResponse: any) => {
     try {
-
       const savedFormResponse = await globalApiCallHelper({
         api: "/forms/save-response",
         method: "POST",
@@ -113,11 +111,52 @@ export function useForms() {
           isClosable: true,
         });
       }
-      
     } catch (error) {
-      console.log("Create Form Response: ",error)
+      console.log("Create Form Response: ", error);
     }
-  }
+  };
+
+  const sendFormInvite = async (
+    formUrl: string,
+    reciever_email: string,
+    subject: string,
+    message: string
+  ) => {
+    try {
+      const sendFormLinkInvite = await globalApiCallHelper({
+        api: "/forms/form-invite",
+        method: "POST",
+        body: JSON.stringify({
+          url: formUrl,
+          email: reciever_email,
+          subject,
+          message,
+        }),
+      });
+
+      if (sendFormLinkInvite) {
+        toast({
+          title: "Form link Sent Successfully",
+          description: `Your form link sent to ${reciever_email} successfully`,
+          status: "success",
+          position: "top-right",
+          duration: 5000,
+          isClosable: true,
+        });
+        navigate("/forms");
+      } else {
+        toast({
+          title: "Form link invite failed",
+          status: "error",
+          position: "top-right",
+          duration: 5000,
+          isClosable: true,
+        });
+      }
+    } catch (error) {
+      console.log("Form Link Invite Error: ", error);
+    }
+  };
 
   // Function to update a form
   const updateForm = async (id: string, updatedForm: FormValues) => {
@@ -158,5 +197,6 @@ export function useForms() {
     updateForm,
     deleteForm,
     createFormResponse,
+    sendFormInvite,
   };
 }

@@ -20,9 +20,14 @@ import { dateTimeFormat } from "../../../utils/helperFunctions/globalDateTimeFor
 import { SignupSchema } from "../../../utils/validations/validations";
 import { OAuth } from "../components/OAuth";
 import { useAuth } from "../hooks";
+import { useEffect } from "react";
+import { useAppState } from "@store/index";
+import { useNavigate } from "react-router-dom";
 
 export function Signup() {
-  const { Signup } = useAuth();
+  const { Signup, getAccount } = useAuth();
+  const [state] = useAppState();
+  const navigate = useNavigate();
 
   const defaultValues = {
     username: "Zakariya",
@@ -35,6 +40,17 @@ export function Signup() {
     firstName: "",
     lastName: "",
   };
+
+  useEffect(() => {
+    const getCurrentAccount = async () => {
+      await getAccount();
+    };
+    if (!state.userProfile?.id) {
+      getCurrentAccount();
+    } else {
+      navigate("/");
+    }
+  }, [state.userProfile?.id]);
 
   const { handleSubmit, control } = useForm({
     defaultValues,

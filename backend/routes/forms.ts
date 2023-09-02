@@ -43,35 +43,48 @@ router.post("/save-response", async (req,res)=>{
 
 // Send form link invite via email
 router.post("/form-invite", async (req, res) => {
-  try {
-    const { email, url, subject, message } = req.body;
+try {
+  const { email, url, subject, message } = req.body;
 
-    // Send the email
-    transporter.sendMail(
-      mailOptions(
-        email,
-        subject,
-        "invited",
-        SendFormInviteTemplate({
-          email: email,
-          url: url,
-        })
-      ),
-      function ({ error, info }: any) {
-        console.log("Sending email...");
-        if (error) {
-          console.log(error);
-          res.status(500).json({ error: "Could not send invite email" });
-        } else {
-          console.log("Email sent: " + info);
-          res.status(201).json({ message: "Email sent" + info });
+  // Send the email asynchronously
+  const sendEmail = async () => {
+    return new Promise((resolve, reject) => {
+      transporter.sendMail(
+        mailOptions(
+          email,
+          subject,
+          "invited",
+          SendFormInviteTemplate({
+            email: email,
+            url: url,
+            message: message,
+          })
+        ),
+        function (error, info) {
+          if (error) {
+            console.error("Error sending invite email:", error);
+            reject(error); // Reject the promise if there's an error
+          } else {
+            console.log("Email sent: " + info);
+            resolve(info); // Resolve the promise if email is sent successfully
+          }
         }
-      }
-    )
-  } catch (error) {
-    console.error("Error sending invite email:", error);
-    res.status(500).json({ error: "Could not send invite email" });
-  }
+      );
+    });
+  };
+
+  // Send the email and handle the response
+  const emailResponse = await sendEmail();
+
+  // Send a response to the frontend
+  res
+    .status(201)
+    .json({ message: "Email sent successfully", response: emailResponse });
+} catch (error) {
+  console.error("Error sending invite email:", error);
+  res.status(500).json({ error: "Could not send invite email" });
+}
+
 });
 
 // Get a particular form

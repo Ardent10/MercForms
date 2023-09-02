@@ -37,7 +37,12 @@ export function ProfileMenu() {
       >
         <Avatar
           size={"sm"}
-          src={"https://zakariya-ardent10.vercel.app/images/profile3.png"}
+          name={state.userProfile.firstName + " " + state.userProfile.lastName}
+          src={
+            state.userProfile.username === "zakariya.khan"
+              ? "https://zakariya-ardent10.vercel.app/images/profile3.png"
+              : ""
+          }
         >
           <AvatarBadge boxSize="1.25em" bg="green.500" />
         </Avatar>
@@ -47,7 +52,14 @@ export function ProfileMenu() {
         <Center>
           <Avatar
             size={"2xl"}
-            src={"https://zakariya-ardent10.vercel.app/images/profile3.png"}
+            name={
+              state.userProfile.firstName + " " + state.userProfile.lastName
+            }
+            src={
+              state.userProfile.username === "zakariya.khan"
+                ? "https://zakariya-ardent10.vercel.app/images/profile3.png"
+                : ""
+            }
           />
         </Center>
         <br />
