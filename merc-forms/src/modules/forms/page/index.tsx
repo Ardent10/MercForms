@@ -22,6 +22,7 @@ import { CustomTooltipWithIcon } from "../components/Form/FormBuilder/dragAndDro
 import { AiOutlineLink } from "react-icons/ai";
 import { RiSendPlaneFill } from "react-icons/ri";
 import { SendFormLinkModal } from "../components/Form/FormBuilder/sendFormLink";
+import { HiEye } from "react-icons/hi";
 
 const templates = [
   {
@@ -33,24 +34,24 @@ const templates = [
   },
   {
     id: 2,
-    imageSrc: "/assets/templates/template1.png",
+    imageSrc: "/assets/templates/event.png",
     color: "blue",
     title: "Event Registration",
-    link: "/forms/templates/event-registration",
+    link: "/forms/update",
   },
   {
     id: 3,
-    imageSrc: "/assets/templates/template2.png",
+    imageSrc: "/assets/templates/contact.png",
     color: "blue",
     title: "Contact Form",
-    link: "/forms/templates/contact-form",
+    link: "/forms/update",
   },
   {
     id: 4,
     title: "Part Invitation",
-    imageSrc: "/assets/templates/template3.png",
+    imageSrc: "/assets/templates/party.png",
     color: "blue",
-    link: "/forms/templates/party-invitation",
+    link: "/forms/update",
   },
 ];
 
@@ -65,6 +66,18 @@ export const Forms = () => {
 
   // Check if the current route is the Forms page ("/forms")
   const isFormsPage = location.pathname === "/forms";
+  const templateFormName = [
+    "Event Registration Form",
+    "Contact Information",
+    "Party Invitation",
+  ];
+  const templateForms = state?.allForms?.filter((form: any) =>
+    templateFormName.includes(form.form_title)
+  );
+  const recentForms = state?.allForms?.filter(
+    (form: any) => !templateFormName.includes(form.form_title)
+  );
+
 
   useEffect(() => {
     const getAllForms = async () => {
@@ -78,14 +91,17 @@ export const Forms = () => {
   // Function to create a new form
   const createForm = ({ nestedRoute }: any) => {
     const id = uuid();
-    if (nestedRoute.includes("forms-response")) {
+    if (
+      nestedRoute.includes("update") ||
+      nestedRoute.includes("forms-response")
+    ) {
       navigate(nestedRoute);
     } else {
       navigate(nestedRoute + "/" + id);
     }
   };
 
-  const handleCopyLinkToClipboard = (e:Event,formId: string) => {
+  const handleCopyLinkToClipboard = (e: Event, formId: string) => {
     e.stopPropagation();
     navigator.clipboard.writeText(
       `${window.location.origin}/forms/forms-response/${formId}`
@@ -142,16 +158,45 @@ export const Forms = () => {
               </Text>
 
               <SimpleGrid column={4} minChildWidth="180px" spacing="40px">
-                {templates.map((template, id) => (
-                  <Box key={id} position={"relative"}>
+                <Box position={"relative"}>
+                  <CutsomTooltip
+                    label={"Create Form"}
+                    placement={"top"}
+                    color="white"
+                  >
+                    <Box
+                      onClick={() =>
+                        createForm({ nestedRoute: "/forms/create" })
+                      }
+                      cursor="pointer"
+                      display="flex"
+                      justifyContent="center"
+                      alignItems="center"
+                      bgGradient="linear-gradient(to right, #8172fd, #c0afff)"
+                      rounded="2xl"
+                      shadow="lg"
+                      h={200}
+                      p={3}
+                      transform={{ base: "none", md: "skewX(-7deg)" }}
+                      _hover={{
+                        transform: "scale(1.05)",
+                        transition: "all .2s ease",
+                      }}
+                    >
+                      <HiDocumentPlus size={80} color={"white"} />
+                    </Box>
+                  </CutsomTooltip>
+                </Box>
+                {templateForms?.map((template: any) => (
+                  <Box key={template._id} position={"relative"}>
                     <CutsomTooltip
-                      label={template.title}
+                      label={template.form_title}
                       placement={"top"}
                       color="white"
                     >
                       <Box
                         onClick={() =>
-                          createForm({ nestedRoute: template.link })
+                          createForm({ nestedRoute: `update/${template._id}` })
                         }
                         cursor="pointer"
                         display="flex"
@@ -168,15 +213,58 @@ export const Forms = () => {
                           transition: "all .2s ease",
                         }}
                       >
-                        {template.image !== undefined ? (
-                          template.image
-                        ) : (
-                          <Image
-                            src={template.imageSrc}
-                            borderRadius="10px"
-                            h={"100%"}
+                        <Image
+                          src={
+                            template.form_title === "Event Registration Form"
+                              ? "/assets/templates/event.png"
+                              : template.form_title === "Contact information"
+                              ? "/assets/templates/contact.png"
+                              : "/assets/templates/party.png"
+                          }
+                          borderRadius="10px"
+                          h={"100%"}
+                        />
+                        <VStack
+                          position={"absolute"}
+                          right={5}
+                          bottom={5}
+                          zIndex={3}
+                        >
+                          <CustomTooltipWithIcon
+                            icon={<HiEye size={"15"} />}
+                            label="View"
+                            color="#fff"
+                            rest={{ size: "sm" }}
+                            onClick={(e: Event) => {
+                              e.stopPropagation();
+                              createForm({
+                                nestedRoute: `/forms/forms-response/${template._id}`,
+                              });
+                            }}
                           />
-                        )}
+                          <CustomTooltipWithIcon
+                            icon={<AiOutlineLink size={"15"} />}
+                            label="Copy Link"
+                            color="#fff"
+                            rest={{ size: "sm" }}
+                            onClick={(e: Event) => {
+                              handleCopyLinkToClipboard(e, template._id);
+                            }}
+                          />
+                          <CustomTooltipWithIcon
+                            icon={<RiSendPlaneFill size={"15"} />}
+                            label="Send"
+                            color="#fff"
+                            rest={{ size: "sm" }}
+                            onClick={(e: Event) => {
+                              e.stopPropagation();
+                              setOpenModal(true);
+                              setSendFormUrl(
+                                `${window.location.origin}/forms/forms-response/${template._id}`
+                              );
+                            }}
+                          />
+                        </VStack>
                       </Box>
                     </CutsomTooltip>
                   </Box>
@@ -198,20 +286,20 @@ export const Forms = () => {
               </Heading>
 
               <Divider />
-              {state.allForms === null ? (
+              {recentForms === null ? (
                 <Loader />
-              ) : state.allForms.length === 0 ? (
+              ) : recentForms.length === 0 ? (
                 <Text textAlign="center" fontSize="lg">
                   No Forms Created Yet
                 </Text>
               ) : (
                 <SimpleGrid column={4} minChildWidth="180px" spacing="40px">
-                  {state?.allForms?.map((form: any, id: number) => (
+                  {recentForms?.map((form: any, id: number) => (
                     <Box key={form._id} position={"relative"}>
                       <Box
                         onClick={() =>
                           createForm({
-                            nestedRoute: `forms-response/${form._id}`,
+                            nestedRoute: `update/${form._id}`,
                           })
                         }
                         cursor="pointer"
@@ -234,13 +322,32 @@ export const Forms = () => {
                           borderRadius="10px"
                           h={"100%"}
                         />
-                        <VStack position={"absolute"} right={5} bottom={5}>
+                        <VStack
+                          position={"absolute"}
+                          right={5}
+                          bottom={5}
+                          zIndex={3}
+                        >
+                          <CustomTooltipWithIcon
+                            icon={<HiEye size={"15"} />}
+                            label="View"
+                            color="#fff"
+                            rest={{ size: "sm" }}
+                            onClick={(e: Event) => {
+                              e.stopPropagation();
+                              createForm({
+                                nestedRoute: `/forms/forms-response/${form._id}`,
+                              });
+                            }}
+                          />
                           <CustomTooltipWithIcon
                             icon={<AiOutlineLink size={"15"} />}
                             label="Copy Link"
                             color="#fff"
                             rest={{ size: "sm" }}
-                            onClick={(e: Event) => handleCopyLinkToClipboard(e,form._id)}
+                            onClick={(e: Event) => {
+                              handleCopyLinkToClipboard(e, form._id);
+                            }}
                           />
                           <CustomTooltipWithIcon
                             icon={<RiSendPlaneFill size={"15"} />}

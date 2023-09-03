@@ -188,7 +188,7 @@ const SortableAccordionItem = ({
 }: ISortableAccordionItemProps) => {
   const [answerType, setAnswerType] = useState("Multiple Choice");
   const [openModal, setOpenModal] = useState(false);
-
+  
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id });
 
@@ -280,51 +280,58 @@ const SortableAccordionItem = ({
             </Box>
 
             {/* Question Choices preview section */}
-            <Stack pt={5} id="question_choices" maxW={"sm"}>
+
+            <Stack pt={5} id="question_choices">
+              {watchAllFields.questions[questionIndex].answerType ===
+                "Paragraph" && (
+                <Textarea
+                  placeholder="Enter your answer..."
+                  size="lg"
+                  isDisabled
+                />
+              )}
+
               {watchAllFields.questions[questionIndex].choices.map(
-                (choice: any, choiceIndex: any) =>
-                // Checking different types of Answer type to render different components
-                  watchAllFields.questions[questionIndex].answerType ===
-                  "Multiple Choice" ? (
-                    <Box display={"flex"} flexDirection={"column"}>
+                (choice: any, choiceIndex: any) => (
+                  <Box
+                    display={"flex"}
+                    flexDirection={"column"}
+                    key={choiceIndex}
+                  >
+                    {watchAllFields.questions[questionIndex].answerType ===
+                      "Multiple Choice" && (
                       <Radio
-                        key={choiceIndex}
                         value={choice.choiceText}
                         colorScheme="purple"
                         isDisabled
                       >
                         {choice.choiceText}
                       </Radio>
-                      <Box display={"flex"} justifyContent={"center"} p={3}>
-                        {watchAllFields.questions[questionIndex]?.choices[
-                          choiceIndex
-                        ]?.imageUrl && (
-                          <img
-                            src={
-                              watchAllFields.questions[questionIndex].choices[
-                                choiceIndex
-                              ].imageUrl
-                            }
-                            width={"180px"}
-                            style={{ borderRadius: "10px" }}
-                            alt="option-image"
-                          />
-                        )}
-                      </Box>
+                    )}
+                    {watchAllFields.questions[questionIndex].answerType ===
+                      "Checkboxes" && (
+                      <Checkbox isDisabled colorScheme="purple">
+                        {choice.choiceText}
+                      </Checkbox>
+                    )}
+                    <Box display={"flex"} justifyContent={"center"} p={3}>
+                      {watchAllFields.questions[questionIndex]?.choices[
+                        choiceIndex
+                      ]?.imageUrl && (
+                        <img
+                          src={
+                            watchAllFields.questions[questionIndex].choices[
+                              choiceIndex
+                            ].imageUrl
+                          }
+                          width={"180px"}
+                          style={{ borderRadius: "10px" }}
+                          alt="option-image"
+                        />
+                      )}
                     </Box>
-                  ) : watchAllFields.questions[questionIndex].answerType ===
-                    "Checkboxes" ? (
-                    <Checkbox isDisabled key={choiceIndex} colorScheme="purple">
-                      {choice.choiceText}
-                    </Checkbox>
-                  ) : (
-                    <Textarea
-                      key={choiceIndex}
-                      placeholder="Enter your answer..."
-                      size="lg"
-                      isDisabled
-                    />
-                  )
+                  </Box>
+                )
               )}
             </Stack>
           </Flex>
@@ -370,6 +377,9 @@ const SortableAccordionItem = ({
                     required={true}
                     data={QuestionType}
                     setOption={setAnswerType}
+                    currentAnswerType={
+                      watchAllFields.questions[questionIndex].answerType
+                    }
                   />
                 </Box>
               </Box>
@@ -433,3 +443,53 @@ const SortableAccordionItem = ({
     </AccordionItem>
   );
 };
+
+{
+  /* <Stack pt={5} id="question_choices" maxW={"sm"}>
+              {watchAllFields.questions[questionIndex].choices.map(
+                (choice: any, choiceIndex: any) =>
+                  // Checking different types of Answer type to render different components
+                  watchAllFields.questions[questionIndex].answerType ===
+                  "Multiple Choice" ? (
+                    <Box display={"flex"} flexDirection={"column"}>
+                      <Radio
+                        key={choiceIndex}
+                        value={choice.choiceText}
+                        colorScheme="purple"
+                        isDisabled
+                      >
+                        {choice.choiceText}
+                      </Radio>
+                      <Box display={"flex"} justifyContent={"center"} p={3}>
+                        {watchAllFields.questions[questionIndex]?.choices[
+                          choiceIndex
+                        ]?.imageUrl && (
+                          <img
+                            src={
+                              watchAllFields.questions[questionIndex].choices[
+                                choiceIndex
+                              ].imageUrl
+                            }
+                            width={"180px"}
+                            style={{ borderRadius: "10px" }}
+                            alt="option-image"
+                          />
+                        )}
+                      </Box>
+                    </Box>
+                  ) : watchAllFields.questions[questionIndex].answerType ===
+                    "Checkboxes" ? (
+                    <Checkbox isDisabled key={choiceIndex} colorScheme="purple">
+                      {choice.choiceText}
+                    </Checkbox>
+                  ) : (
+                    <Textarea
+                      key={choiceIndex}
+                      placeholder="Enter your answer..."
+                      size="lg"
+                      isDisabled
+                    />
+                  )
+              )}
+            </Stack> */
+}

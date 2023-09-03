@@ -8,7 +8,7 @@ import {
 } from "@chakra-ui/react";
 import { BsFillBrightnessLowFill } from "react-icons/bs";
 import { MdDarkMode } from "react-icons/md";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import { Logo } from "../Logo";
 import { ProfileMenu } from "../ProfileMenu";
 import { useState, useEffect } from "react";
@@ -47,10 +47,10 @@ const NavLink = (props: Props) => {
 
 export function Navbar() {
   const [state] = useAppState();
+  const { id } = useParams();
   const location = useLocation();
 
   const { getAccount } = useAuth();
-  // console.log(state);
 
   useEffect(() => {
     const getCurrentAccount = async () => {
@@ -67,7 +67,11 @@ export function Navbar() {
   return (
     <>
       {openModal && (
-        <SendFormLinkModal openModal={openModal} setOpenModal={setOpenModal} formUrl="" />
+        <SendFormLinkModal
+          openModal={openModal}
+          setOpenModal={setOpenModal}
+          formUrl={JSON.stringify(id)}
+        />
       )}
       <Box
         zIndex={999}
@@ -97,7 +101,8 @@ export function Navbar() {
           <Flex alignItems={"center"}>
             <Stack direction={"row"} spacing={7}>
               {state.userProfile?.id &&
-                location.pathname.includes("/forms/create/") && (
+                (location.pathname.includes("/forms/update/") ||
+                  location.pathname.includes("/forms/forms-response/")) && (
                   <>
                     <CustomTooltipWithIcon
                       icon={<AiOutlineLink />}
@@ -128,7 +133,8 @@ export function Navbar() {
                 )}
               </Button>
 
-              {!location.pathname.includes("/forms/create") && (
+              {!(location.pathname.includes("/update") ||
+                location.pathname.includes("/forms-response")) && (
                 <Button colorScheme="purple">
                   <Link to="/forms">Get Started</Link>
                 </Button>

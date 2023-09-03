@@ -2,6 +2,8 @@ import bcrypt from "bcryptjs";
 import { Request, Response, Router } from "express";
 import jwt from "jsonwebtoken";
 import User from "../models/user";
+import FormModel from "../models/forms";
+import { templateForms } from "../utils/templateForms";
 
 const router: Router = Router();
 
@@ -46,6 +48,14 @@ router.post("/register", async (req: Request, res: Response) => {
       });
 
       const savedUser = await newUser.save();
+
+      const addtemplateForms = [
+        { ...templateForms[0], userId: savedUser._id },
+        { ...templateForms[1], userId: savedUser._id },
+        { ... templateForms[2], userId: savedUser._id },
+      ];
+
+      await FormModel.insertMany(addtemplateForms);
 
       res.status(201).json({
         id: savedUser._id,

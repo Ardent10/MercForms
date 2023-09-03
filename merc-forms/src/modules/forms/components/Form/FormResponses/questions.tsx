@@ -35,13 +35,11 @@ export const FormQuestions = ({
     Record<string, string>
   >({});
 
- useEffect(() => {
-    if(answers.length === 0) {
-      setSelectedChoices({})
+  useEffect(() => {
+    if (answers.length === 0) {
+      setSelectedChoices({});
     }
-  }
-  , [answers])
-
+  }, [answers]);
 
   const handleChoiceSelection = (
     question: any,
@@ -112,7 +110,7 @@ export const FormQuestions = ({
         >
           <Text pb={2}>
             {question.questionText}
-            <span color="red">{question.isRequired && "*"}</span>
+            {question.isRequired && <span style={{ color: "red" }}> *</span>}
           </Text>
 
           {question?.questionImageUrl && (
@@ -184,7 +182,6 @@ export const FormQuestions = ({
                         flexDirection={"column"}
                       >
                         <Checkbox
-                          isDisabled
                           key={choiceIndex}
                           isChecked={
                             selectedChoices[question._id] === choice._id

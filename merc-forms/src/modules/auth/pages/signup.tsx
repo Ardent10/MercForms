@@ -42,12 +42,7 @@ export function Signup() {
   };
 
   useEffect(() => {
-    const getCurrentAccount = async () => {
-      await getAccount();
-    };
-    if (!state.userProfile?.id) {
-      getCurrentAccount();
-    } else {
+    if (state.userProfile?.id) {
       navigate("/");
     }
   }, [state.userProfile?.id]);

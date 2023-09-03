@@ -102,7 +102,7 @@ router.get("/forms/:id", async (req, res) => {
 });
 
 // Update a form
-router.put("/forms/:id", async (req, res) => {
+router.put("/update-form/:id", async (req, res) => {
   try {
     const updatedForm = await FormModel.findByIdAndUpdate(
       req.params.id,
@@ -112,7 +112,7 @@ router.put("/forms/:id", async (req, res) => {
     if (!updatedForm) {
       res.status(404).json({ error: "Form not found" });
     } else {
-      res.json(updatedForm);
+      res.status(201).json(updatedForm);
     }
   } catch (error) {
     res.status(500).json({ error: "Could not update form" });

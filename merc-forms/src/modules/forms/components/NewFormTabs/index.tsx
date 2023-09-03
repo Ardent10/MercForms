@@ -41,7 +41,10 @@ export const NewFormsTabs = () => {
         </Tab>
       </TabList>
       <TabPanels
-        bg={"url(/assets/form/formBuilder-bg.svg)"}
+        bg={useColorModeValue(
+          "url(/assets/form/formBuilder-bg.svg)",
+          "url(/assets/form/form-dark-bg.svg)"
+        )}
         bgSize={"cover"}
         bgRepeat={"no-repeat"}
         position={"relative"}

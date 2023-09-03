@@ -12,7 +12,7 @@ type FormValues = {
     answerType: string;
     paragraphAnswer?: string;
     isRequired: boolean;
-    choices: {
+    choices?: {
       choiceText?: string;
       image?: string;
     }[];
@@ -20,7 +20,6 @@ type FormValues = {
 };
 
 export function useForms() {
-  const [forms, setForms] = useState<FormValues[]>([]);
   const [loading, setLoading] = useState(true);
   const toast = useToast();
   const [state, dispatch] = useAppState();
@@ -162,35 +161,87 @@ export function useForms() {
   const updateForm = async (id: string, updatedForm: FormValues) => {
     try {
       const updatedFormData = await globalApiCallHelper({
-        api: `/forms/${id}`,
+        api: `/forms/update-form/${id}`,
         method: "PUT",
         body: JSON.stringify(updatedForm),
       });
-      //   const updatedForms = forms.map((form) =>
-      //     form._id === id ? updatedFormData : form
-      //   );
-      //   setForms(updatedForms);
+        if(updatedFormData){
+          toast({
+            title: "Form Updated",
+            description: "Your form has been updated successfully",
+            status: "success",
+            position: "top-right",
+            duration: 5000,
+            isClosable: true,
+          });
+        }else {
+          toast({
+            title: "Form Update Failed",
+            description: "Your form could not be updated",
+            status: "error",
+            position: "top-right",
+            duration: 5000,
+            isClosable: true,
+          });
+        }
+
     } catch (error) {
       console.error("Error updating form:", error);
+    }
+  };
+
+  // Get All form responses 
+  const getAllformsResponses = async (id: string) => {
+    try {
+      const data = await globalApiCallHelper({
+        api: `/forms/getAllformsResponses/${id}`,
+        method: "GET",
+      });
+
+      if (data.length > 0) {
+        dispatch({ type: "setAllFormsResponses", payload: data });
+      }
+
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching forms:", error);
     }
   };
 
   // Function to delete a form
   const deleteForm = async (id: string) => {
     try {
-      await globalApiCallHelper({
+      const deletedForm = await globalApiCallHelper({
         api: `/forms/${id}`,
         method: "DELETE",
       });
-      //   const updatedForms = forms.filter((form) => form._id !== id);
-      //   setForms(updatedForms);
+      if(deletedForm){
+        toast({
+          title: "Form Deleted",
+          description: "Your form has been deleted successfully",
+          status: "success",
+          position: "top-right",
+          duration: 5000,
+          isClosable: true,
+        });
+      }
+      else{
+        toast({
+          title: "Form Deletion Failed",
+          description: "Your form could not be deleted",
+          status: "error",
+          position: "top-right",
+          duration: 5000,
+          isClosable: true,
+        });
+      }
+
     } catch (error) {
       console.error("Error deleting form:", error);
     }
   };
 
   return {
-    forms,
     loading,
     fetchAllForms,
     createForm,
@@ -198,5 +249,6 @@ export function useForms() {
     deleteForm,
     createFormResponse,
     sendFormInvite,
+    getAllformsResponses,
   };
 }

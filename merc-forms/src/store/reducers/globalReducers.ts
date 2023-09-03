@@ -27,6 +27,13 @@ const globalReducers = (state: State, action: Action) => {
         allForms: action.payload,
       };
     }
+    case "setAllFormsResponses": {
+      return {
+        ...state,
+        allFormsResponses: action.payload,
+      };
+    }
+
     default:
       return state;
   }

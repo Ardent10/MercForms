@@ -56,6 +56,7 @@ export const ChoicesForm = ({
         {answerType === "Paragraph" ? (
           <TextAreaInput
             name={`questions[${questionIndex}].paragraphAnswer`}
+            key={`questions[${questionIndex}].paragraphAnswer`}
             control={control}
             placeholder="Enter your answer..."
             size="lg"
@@ -81,7 +82,7 @@ export const ChoicesForm = ({
 
                   {answerType === "Checkboxes" ? (
                     // Checkbox choices here
-                    <Stack alignItems="center" maxW="full" flex={1}>
+                    <Stack key={choice.id} alignItems="center" maxW="full" flex={1}>
                       <Box sx={styles.accordionBoxStyles} gap={2}>
                         <Box
                           sx={styles.accordionBoxStyles}
@@ -135,6 +136,7 @@ export const ChoicesForm = ({
                       templateRows="repeat(1, 1fr)"
                       templateColumns="repeat(7, 1fr)"
                       gap={4}
+                      key={choice.id}
                     >
                       <GridItem
                         colSpan={6}

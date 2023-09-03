@@ -2,7 +2,6 @@ import { Login, Signup } from "@modules/auth/pages";
 import { Error404 } from "@modules/error";
 import { Forms } from "@modules/forms/page";
 import { NewForm } from "@modules/forms/page/createNewForm";
-import { TemplateForms } from "@modules/forms/page/templateForms";
 import { Home } from "@modules/home/page";
 import { Route, Routes } from "react-router-dom";
 import { SubmitFormResponse } from "@modules/forms/page/submitFormResponse";
@@ -15,13 +14,10 @@ function App() {
       <Route path="/" element={<Home />} />
       <Route path="/forms" element={<Forms />}>
         <Route path="/forms/create/:id" element={<NewForm />} />
+        <Route path="/forms/update/:id" element={<NewForm />} />
         <Route
           path="/forms/forms-response/:formId"
           element={<SubmitFormResponse />}
-        />
-        <Route
-          path="/forms/templates/:templateName/:id"
-          element={<TemplateForms />}
         />
       </Route>
       <Route path="*" element={<Error404 />} />
