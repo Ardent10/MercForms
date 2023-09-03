@@ -288,7 +288,7 @@ export const Forms = () => {
               <Divider />
               {recentForms === null ? (
                 <Loader />
-              ) : recentForms.length === 0 ? (
+              ) : recentForms?.length === 0 ? (
                 <Text textAlign="center" fontSize="lg">
                   No Forms Created Yet
                 </Text>
