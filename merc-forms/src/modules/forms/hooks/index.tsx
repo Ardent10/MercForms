@@ -207,10 +207,10 @@ export function useForms() {
   };
 
   // Get All form responses
-  const getAllformsResponsesById = async (id: string) => {
+  const getAllformsResponsesById = async (formId: string) => {
     try {
       const data = await globalApiCallHelper({
-        api: `/forms/getAllformResponses/${id}`,
+        api: `/forms/getAllformResponses/${formId}`,
         method: "GET",
       });
 
@@ -224,6 +224,24 @@ export function useForms() {
       console.error("Error fetching forms:", error);
     }
   };
+
+  const getFormResponseById = async (responseId: string) => {
+    try {
+      setLoading(true);
+      const data = await globalApiCallHelper({
+        api: `/forms/getFormResponseById/${responseId}`,
+        method: "GET",
+      });
+
+      if (data) {
+        return data;
+      }
+
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching forms:", error);
+    }
+  }
 
   // Function to delete a form
   const deleteForm = async (id: string) => {
@@ -266,5 +284,6 @@ export function useForms() {
     createFormResponse,
     sendFormInvite,
     getAllformsResponsesById,
+    getFormResponseById,
   };
 }

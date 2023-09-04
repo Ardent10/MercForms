@@ -57,6 +57,21 @@ router.get("/getAllFormResponses/:id", async (req, res) => {
   }
 });
 
+router.get("/getFormResponseById/:responseId", async (req, res) => {
+  try {
+    const formResponse = await FormResponseModel.findById({
+      _id: req.params.responseId,
+    });
+    if (!formResponse) {
+      res.status(404).json({ error: "Form Response not found" });
+    } else {
+      res.json(formResponse);
+    }
+  } catch (error) {
+    res.status(500).json({ error: "Could not retrieve form response" });
+  }
+});
+
 // Send form link invite via email
 router.post("/form-invite", async (req, res) => {
   try {

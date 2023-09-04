@@ -19,6 +19,10 @@ function App() {
           path="/forms/forms-response/:formId"
           element={<SubmitFormResponse />}
         />
+        <Route
+          path="/forms/forms-response/view/:formId/:responseId"
+          element={<SubmitFormResponse />}
+        />
       </Route>
       <Route path="*" element={<Error404 />} />
     </Routes>

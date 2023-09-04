@@ -132,6 +132,7 @@ export function useAuth() {
       }
      setIsLoading(false);
     } catch (error: any) {
+       setIsLoading(false);
       toast({
         title: "Login Failed",
         description: "Please check your credentials.",

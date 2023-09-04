@@ -120,7 +120,7 @@ export const FormBuilder = () => {
   });
 
   return (
-    <Container maxW={"100vw"} position={"relative"}>
+    <Container maxW={"100vw"} position={"relative"} py={3}>
       {updateRoute && isUpdateFormLoaded ? (
         <Loader />
       ) : (
@@ -128,7 +128,7 @@ export const FormBuilder = () => {
           <Button
             position={"absolute"}
             right={"15vw"}
-            mt={2}
+            mt={5}
             colorScheme="purple"
             rightIcon={<AiFillEye />}
             onClick={() => setOpenedAccordion([])}

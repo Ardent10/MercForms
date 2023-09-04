@@ -5,12 +5,14 @@ interface IUserDetailsProps {
   control: any;
   textColor: string;
   bgColor: string;
+  formResponseViewMode?: any;
 }
 
 export const UserDetails = ({
   control,
   textColor,
   bgColor,
+  formResponseViewMode,
 }: IUserDetailsProps) => {
   return (
     <Stack
@@ -21,7 +23,7 @@ export const UserDetails = ({
       p={5}
       w={"50vw"}
       bg={bgColor}
-      direction={'row'}
+      direction={"row"}
     >
       <InputField
         name="userFullName"
@@ -29,9 +31,9 @@ export const UserDetails = ({
         control={control}
         type="text"
         placeholder="Enter your name"
-        disable={false}
         inputHeadingType="Bold"
         inputHeadingLabel="Name"
+        disable={formResponseViewMode?.disable ? true : false}
       />
       <InputField
         name="email"
@@ -39,7 +41,7 @@ export const UserDetails = ({
         required
         type="text"
         placeholder="Enter your email"
-        disable={false}
+        disable={formResponseViewMode?.disable ? true : false}
         inputHeadingType="Bold"
         inputHeadingLabel="Email"
       />

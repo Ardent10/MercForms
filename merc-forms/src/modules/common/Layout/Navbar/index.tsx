@@ -48,7 +48,7 @@ const NavLink = (props: Props) => {
 
 export function Navbar() {
   const [state] = useAppState();
-  const { formId } = useParams();
+  const { formId,id } = useParams();
   const location = useLocation();
   const toast = useToast();
 
@@ -68,9 +68,16 @@ export function Navbar() {
 
   const handleCopyLinkToClipboard = (e: Event) => {
     e.stopPropagation();
+    if(location.pathname.includes("/forms/forms-response/")) {
+
     navigator.clipboard.writeText(
       `${window.location.origin}/forms/forms-response/${formId}`
     );
+    }else {
+      navigator.clipboard.writeText(
+        `${window.location.origin}/forms/update/${id}`
+      );
+    }
     toast({
       title: "Link Copied",
       description: "Link copied to clipboard",

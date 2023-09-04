@@ -14,6 +14,7 @@ import { FormQuestions } from "./questions";
 import { FormResponseHeader } from "./header";
 import { Loader } from "@modules/common/Loader";
 import { UserDetails } from "./userDetails";
+import { useLocation, useParams } from "react-router-dom";
 
 type FormResponseValues = {
   formId: string;
@@ -29,12 +30,18 @@ type FormResponseValues = {
 
 export const FormResponse = ({ currentForm }: any) => {
   const [responseForm, setResponseForm] = useState<any>(null);
+  const [formResponseViewMode, setFormResponseViewMode] = useState<any>({
+    disable: false,
+    answers: null,
+  });
   const [answers, setAnswers] = useState<any[]>([]);
-  const { createFormResponse } = useForms();
+  const { createFormResponse, getFormResponseById, loading } = useForms();
   const toast = useToast();
+  const location = useLocation();
+  const { responseId } = useParams();
 
   let defaultValues;
-  const { handleSubmit, control,reset } = useForm({
+  const { handleSubmit, control, reset } = useForm({
     defaultValues: defaultValues,
     mode: "onBlur",
   });
@@ -64,8 +71,31 @@ export const FormResponse = ({ currentForm }: any) => {
         }),
       };
       reset(formValues);
+    } 
+  }, [currentForm]);
+
+  // for view mode 
+  useEffect(() => {
+    if (location.pathname.includes("view") && responseId) {
+      const getFormResponse = async () => {
+        const response = await getFormResponseById(responseId);
+        if (response) {
+          setFormResponseViewMode({
+            disable: true,
+            answers: response?.answers,
+          });
+
+          reset({
+            userFullName: response?.userFullName,
+            email: response?.email,
+          });
+        } else {
+          return;
+        }
+      };
+      getFormResponse();
     }
-  }, [currentForm, reset]);
+  }, [currentForm,responseId]);
 
   const bgColor = useColorModeValue("white", "gray.800");
   const textColor = useColorModeValue("#000", "#fff");
@@ -97,8 +127,6 @@ export const FormResponse = ({ currentForm }: any) => {
       email: "",
       answers: [],
     });
-
-    
   };
 
   return (
@@ -109,6 +137,7 @@ export const FormResponse = ({ currentForm }: any) => {
       bgSize={"cover"}
       bgRepeat={"no-repeat"}
       position={"relative"}
+      py={5}
     >
       {!responseForm || responseForm?.length === 0 ? (
         <Loader />
@@ -131,6 +160,7 @@ export const FormResponse = ({ currentForm }: any) => {
                 control={control}
                 textColor={textColor}
                 bgColor={bgColor}
+                formResponseViewMode={formResponseViewMode}
               />
               <FormQuestions
                 control={control}
@@ -139,29 +169,32 @@ export const FormResponse = ({ currentForm }: any) => {
                 setAnswers={setAnswers}
                 answers={answers}
                 questionsArray={responseForm?.questions}
+                formResponseViewMode={formResponseViewMode}
               />
 
-              <Flex
-                py={5}
-                align={"center"}
-                flex={1}
-                justifyContent={"end"}
-                gap={5}
-              >
-                <Button
-                  mt={2}
-                  variant="outline"
-                  colorScheme="purple"
-                  _hover={{ bg: "purple.500" }}
-                  color={"white"}
-                  onClick={clearAllAnswers}
+              {!location.pathname.includes("view") && (
+                <Flex
+                  py={5}
+                  align={"center"}
+                  flex={1}
+                  justifyContent={"end"}
+                  gap={5}
                 >
-                  Clear Responses
-                </Button>
-                <Button mt={2} colorScheme="purple" type="submit">
-                  Submit
-                </Button>
-              </Flex>
+                  <Button
+                    mt={2}
+                    variant="outline"
+                    colorScheme="purple"
+                    _hover={{ bg: "purple.500" }}
+                    color={"white"}
+                    onClick={clearAllAnswers}
+                  >
+                    Clear Responses
+                  </Button>
+                  <Button mt={2} colorScheme="purple" type="submit">
+                    Submit
+                  </Button>
+                </Flex>
+              )}
             </Container>
           </VStack>
         </form>

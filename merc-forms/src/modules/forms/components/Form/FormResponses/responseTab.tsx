@@ -30,9 +30,16 @@ export const ResponseTab = () => {
     formsResponsesById();
   }, [id]);
 
-  console.log(formResponses);
+  const handleOpenResponse = (response: any) => {
+    console.log("response", response);
+    window.open(
+      `${window.location.origin}/forms/forms-response/view/${response?.formId}/${response?._id}`,
+      "_blank"
+    );
+  }
+
   return (
-    <Container maxW={"2xl"}>
+    <Container maxW={"2xl"} py={5}>
       <TableContainer rounded={"xl"} shadow={"2xl"}>
         <Table variant="striped" colorScheme="purple" bg={"#fff"}>
           {/* <TableCaption>{new Date().getFullYear()} MercForms.</TableCaption> */}
@@ -53,9 +60,7 @@ export const ResponseTab = () => {
                     <IconButton
                       aria-label="View Responses"
                       icon={<BiLinkExternal />}
-                      onClick={() => {
-                        console.log(response);
-                      }}
+                      onClick={() => handleOpenResponse(response)}
                     />
                   </Td>
                 </Tr>

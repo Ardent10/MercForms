@@ -11,6 +11,7 @@ interface Props {
   size: "md" | "lg" | "xl";
   rest?: any;
   onBlur?:any;
+  defaultValue?: string;
 }
 
 export function TextAreaInput({
@@ -23,6 +24,7 @@ export function TextAreaInput({
   size,
   rest,
   onBlur,
+  defaultValue,
 }: Props) {
   return (
     <Controller

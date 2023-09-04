@@ -21,6 +21,7 @@ interface IFormHeaderProps {
   questionsArray: IQuestion[];
   setAnswers: any;
   answers: any;
+  formResponseViewMode?: any;
 }
 
 export const FormQuestions = ({
@@ -30,6 +31,7 @@ export const FormQuestions = ({
   questionsArray,
   setAnswers,
   answers,
+  formResponseViewMode,
 }: IFormHeaderProps) => {
   const [selectedChoices, setSelectedChoices] = useState<
     Record<string, string>
@@ -129,10 +131,17 @@ export const FormQuestions = ({
               <TextAreaInput
                 name={`userParagraphAnswer_${question._id}`}
                 control={control}
-                placeholder="Untitled Description"
+                placeholder={
+                  formResponseViewMode
+                    ? formResponseViewMode?.answers?.find(
+                        (q: any) => q.questionId === question._id
+                      )?.userParagraphAnswer
+                    : "Untitled Description"
+                }
                 onBlur={(e: any) => handleParagraphAnswer(e, question)}
                 size="lg"
                 minRows={3}
+                disable={formResponseViewMode?.disable ? true : false}
                 rest={{
                   h: "50%",
                   color: textColor,
@@ -152,7 +161,18 @@ export const FormQuestions = ({
                         key={choiceIndex}
                         value={choice.choiceText}
                         colorScheme="purple"
-                        isChecked={selectedChoices[question._id] === choice._id}
+                        isDisabled={
+                          formResponseViewMode?.disable ? true : false
+                        }
+                        isChecked={
+                          formResponseViewMode
+                            ? formResponseViewMode?.answers?.some(
+                                (q: any) =>
+                                  q.questionId === question._id &&
+                                  q.userSelectedChoiceIds?.includes(choice._id)
+                              )
+                            : selectedChoices[question._id] === choice._id
+                        }
                         onChange={() =>
                           handleChoiceSelection(
                             question,
@@ -184,7 +204,18 @@ export const FormQuestions = ({
                         <Checkbox
                           key={choiceIndex}
                           isChecked={
-                            selectedChoices[question._id] === choice._id
+                            formResponseViewMode
+                              ? formResponseViewMode?.answers?.some(
+                                  (q: any) =>
+                                    q.questionId === question._id &&
+                                    q.userSelectedChoiceIds?.includes(
+                                      choice._id
+                                    )
+                                )
+                              : selectedChoices[question._id] === choice._id
+                          }
+                          isDisabled={
+                            formResponseViewMode?.disable ? true : false
                           }
                           onChange={() =>
                             handleChoiceSelection(
