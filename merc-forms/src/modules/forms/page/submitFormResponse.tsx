@@ -1,15 +1,26 @@
 import { Container, Stack } from "@chakra-ui/react";
 import { FormResponse } from "../components";
-import { useAppState } from "@store/index";
-import { useLocation, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import { useForms } from "../hooks";
+import { useEffect, useState } from "react";
 
 export const SubmitFormResponse = () => {
   const { formId } = useParams();
-  const [state] = useAppState();
+  const [currentForm, setCurrentForm] = useState<any>(null);
+  const { getFormById } = useForms();
 
-  const matchingForm = state?.allForms?.find(
-    (form: any) => form._id === formId
-  );
+  useEffect(() => {
+    const getForm = async () => {
+      if (formId) {
+        const form = await getFormById(formId);
+        if (form) {
+          setCurrentForm(form);
+        }
+      }
+    };
+
+    getForm();
+  }, [formId]);
 
   return (
     <Container maxW={"full"} px={0}>
@@ -20,7 +31,7 @@ export const SubmitFormResponse = () => {
         pt={20}
         px={0}
       >
-        <FormResponse currentForm={matchingForm} />
+        <FormResponse currentForm={currentForm} />
       </Stack>
     </Container>
   );

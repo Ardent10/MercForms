@@ -5,6 +5,7 @@ import {
   Stack,
   useColorMode,
   useColorModeValue,
+  useToast,
 } from "@chakra-ui/react";
 import { BsFillBrightnessLowFill } from "react-icons/bs";
 import { MdDarkMode } from "react-icons/md";
@@ -47,8 +48,9 @@ const NavLink = (props: Props) => {
 
 export function Navbar() {
   const [state] = useAppState();
-  const { id } = useParams();
+  const { formId } = useParams();
   const location = useLocation();
+  const toast = useToast();
 
   const { getAccount } = useAuth();
 
@@ -64,13 +66,28 @@ export function Navbar() {
   const { colorMode, toggleColorMode } = useColorMode();
   const [openModal, setOpenModal] = useState(false);
 
+  const handleCopyLinkToClipboard = (e: Event) => {
+    e.stopPropagation();
+    navigator.clipboard.writeText(
+      `${window.location.origin}/forms/forms-response/${formId}`
+    );
+    toast({
+      title: "Link Copied",
+      description: "Link copied to clipboard",
+      status: "success",
+      position: "top-right",
+      duration: 5000,
+      isClosable: true,
+    });
+  };
+
   return (
     <>
       {openModal && (
         <SendFormLinkModal
           openModal={openModal}
           setOpenModal={setOpenModal}
-          formUrl={JSON.stringify(id)}
+          formUrl={JSON.stringify(formId)}
         />
       )}
       <Box
@@ -108,6 +125,9 @@ export function Navbar() {
                       icon={<AiOutlineLink />}
                       label="Copy Link"
                       color="#fff"
+                      onClick={(e: Event) => {
+                        handleCopyLinkToClipboard(e);
+                      }}
                     />
 
                     <Button
@@ -133,8 +153,10 @@ export function Navbar() {
                 )}
               </Button>
 
-              {!(location.pathname.includes("/update") ||
-                location.pathname.includes("/forms-response")) && (
+              {!(
+                location.pathname.includes("/update") ||
+                location.pathname.includes("/forms-response")
+              ) && (
                 <Button colorScheme="purple">
                   <Link to="/forms">Get Started</Link>
                 </Button>

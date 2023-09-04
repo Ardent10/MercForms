@@ -1,3 +1,5 @@
+import { initialState } from ".";
+
 type State = {
   [key: string]: any;
 };
@@ -32,6 +34,10 @@ const globalReducers = (state: State, action: Action) => {
         ...state,
         allFormsResponses: action.payload,
       };
+    }
+
+    case 'logout' : {
+      return initialState;
     }
 
     default:

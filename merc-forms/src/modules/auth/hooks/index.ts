@@ -2,6 +2,7 @@ import { useAppState } from "@store/index";
 import { globalApiCallHelper } from "@utils/helperFunctions/globalApiCallHelper";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@chakra-ui/react";
+import { useState } from "react";
 
 interface SignupProps {
   email: string;
@@ -21,6 +22,7 @@ export function useAuth() {
   const toast = useToast();
   const navigate = useNavigate();
   const [state, dispatch] = useAppState();
+  const [isLoading, setIsLoading] = useState(false);
 
   const Signup = async ({
     email,
@@ -32,12 +34,7 @@ export function useAuth() {
     lastName,
   }: SignupProps) => {
     try {
-      dispatch({
-        type: "setIsLoading",
-        payload: {
-          isLoading: true,
-        },
-      });
+      setIsLoading(true);
 
       const res = await globalApiCallHelper({
         api: "/auth/register",
@@ -55,7 +52,7 @@ export function useAuth() {
           lastName,
         }),
       });
-      console.log("Signup res", res);
+
       if (res) {
         toast({
           title: "Account Created Successfully",
@@ -68,12 +65,7 @@ export function useAuth() {
       } else {
         navigate("/signup");
       }
-      dispatch({
-        type: "setIsLoading",
-        payload: {
-          isLoading: false,
-        },
-      });
+      setIsLoading(false)
     } catch (error) {
       toast({
         title: "Account Creation Failed",
@@ -83,23 +75,13 @@ export function useAuth() {
         isClosable: true,
       });
     } finally {
-      dispatch({
-        type: "setIsLoading",
-        payload: {
-          isLoading: false,
-        },
-      });
+     setIsLoading(false)
     }
   };
 
   const Login = async ({ email, password }: LoginProps) => {
     try {
-      dispatch({
-        type: "setIsLoading",
-        payload: {
-          isLoading: true,
-        },
-      });
+     setIsLoading(true);
 
       const res = await globalApiCallHelper({
         api: "/auth/login",
@@ -112,7 +94,6 @@ export function useAuth() {
           password,
         }),
       });
-
 
       if (res._doc) {
         localStorage.setItem("auth_token", res.accessToken);
@@ -149,12 +130,7 @@ export function useAuth() {
           isClosable: true,
         });
       }
-      dispatch({
-        type: "setIsLoading",
-        payload: {
-          isLoading: false,
-        },
-      });
+     setIsLoading(false);
     } catch (error: any) {
       toast({
         title: "Login Failed",
@@ -209,6 +185,13 @@ export function useAuth() {
   const Logout = async () => {
     try {
       localStorage.removeItem("auth_token");
+      
+      // empty all the global state
+      dispatch({
+        type: "logout",
+        payload: {},
+      });
+
       toast({
         title: "Logged Out Successfully",
         position: "top-right",
@@ -229,6 +212,7 @@ export function useAuth() {
   };
 
   return {
+    isLoading,
     Signup,
     Login,
     Logout,

@@ -30,65 +30,80 @@ router.post("/create", async (req, res) => {
 });
 
 // Save form response
-router.post("/save-response", async (req,res)=>{
+router.post("/save-response", async (req, res) => {
   try {
     const newFormResponse = new FormResponseModel(req.body);
     const savedFormResponse = await newFormResponse.save();
     res.status(201).json(savedFormResponse);
-
   } catch (error) {
     res.status(500).json({ error: "There was an error while saving the form" });
   }
-}) 
+});
+
+// Find Response by Id
+router.get("/getAllFormResponses/:id", async (req, res) => {
+  try {
+    const formResponse = await FormResponseModel.find({
+      formId: req.params.id,
+    });
+
+    if (!formResponse) {
+      res.status(404).json({ error: "No Response found for this form." });
+    } else {
+      res.status(200).json(formResponse);
+    }
+  } catch (error) {
+    res.status(500).json({ error: "Could not retrieve form responses." });
+  }
+});
 
 // Send form link invite via email
 router.post("/form-invite", async (req, res) => {
-try {
-  const { email, url, subject, message } = req.body;
+  try {
+    const { email, url, subject, message } = req.body;
 
-  // Send the email asynchronously
-  const sendEmail = async () => {
-    return new Promise((resolve, reject) => {
-      transporter.sendMail(
-        mailOptions(
-          email,
-          subject,
-          "invited",
-          SendFormInviteTemplate({
-            email: email,
-            url: url,
-            message: message,
-          })
-        ),
-        function (error, info) {
-          if (error) {
-            console.error("Error sending invite email:", error);
-            reject(error); // Reject the promise if there's an error
-          } else {
-            console.log("Email sent: " + info);
-            resolve(info); // Resolve the promise if email is sent successfully
+    // Send the email asynchronously
+    const sendEmail = async () => {
+      return new Promise((resolve, reject) => {
+        transporter.sendMail(
+          mailOptions(
+            email,
+            subject,
+            "invited",
+            SendFormInviteTemplate({
+              email: email,
+              url: url,
+              message: message,
+            })
+          ),
+          function (error, info) {
+            if (error) {
+              console.error("Error sending invite email:", error);
+              reject(error); // Reject the promise if there's an error
+            } else {
+              console.log("Email sent: " + info);
+              resolve(info); // Resolve the promise if email is sent successfully
+            }
           }
-        }
-      );
-    });
-  };
+        );
+      });
+    };
 
-  // Send the email and handle the response
-  const emailResponse = await sendEmail();
+    // Send the email and handle the response
+    const emailResponse = await sendEmail();
 
-  // Send a response to the frontend
-  res
-    .status(201)
-    .json({ message: "Email sent successfully", response: emailResponse });
-} catch (error) {
-  console.error("Error sending invite email:", error);
-  res.status(500).json({ error: "Could not send invite email" });
-}
-
+    // Send a response to the frontend
+    res
+      .status(201)
+      .json({ message: "Email sent successfully", response: emailResponse });
+  } catch (error) {
+    console.error("Error sending invite email:", error);
+    res.status(500).json({ error: "Could not send invite email" });
+  }
 });
 
 // Get a particular form
-router.get("/forms/:id", async (req, res) => {
+router.get("/getFormById/:id", async (req, res) => {
   try {
     const form = await FormModel.findById(req.params.id);
     if (!form) {

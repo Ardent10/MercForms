@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  Button,
   Checkbox,
   Flex,
   Grid,
@@ -11,7 +12,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { PrimaryButton, Selector } from "@modules/common";
+import { Selector } from "@modules/common";
 import { InputField } from "@modules/common/Form";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
@@ -25,13 +26,13 @@ import { useAppState } from "@store/index";
 import { useNavigate } from "react-router-dom";
 
 export function Signup() {
-  const { Signup, getAccount } = useAuth();
+  const { Signup, isLoading } = useAuth();
   const [state] = useAppState();
   const navigate = useNavigate();
 
   const defaultValues = {
-    username: "Zakariya",
-    email: "zakariya@mercforms.com",
+    username: "John.Doe",
+    email: "john@mercforms.com",
     password: "Test@123",
     confirm_password: "Test@123",
     location: "India",
@@ -215,18 +216,25 @@ export function Signup() {
               <Checkbox colorScheme="purple" name="agree_tnc" defaultChecked>
                 I agree to Term & Conditions.
               </Checkbox>
-              <PrimaryButton
+              <Button
                 type="submit"
-                title="Create Account"
-                width="100%"
-                height={50}
-                fontSize={16}
-                fontWeight={600}
-                borderRadius="10px"
-                borderColor="#6d63fc"
-                padding="0px"
-                showLoaderonBtn={false}
-              />
+                w="full"
+                rounded={"xl"}
+                shadow={"2xl"}
+                bgGradient={"linear-gradient(to right, #8172fd, #c0afff)"}
+                color={"#fff"}
+                h={50}
+                _hover={{
+                  border: "1px solid #6d63fc",
+                  bg: "#fff",
+                  transform: "translateY(-0.05em)",
+                  color: "#000",
+                }}
+                isLoading={isLoading}
+                loadingText="Please Wait..."
+              >
+                Create Account
+              </Button>
             </Stack>
           </form>
           <Text>

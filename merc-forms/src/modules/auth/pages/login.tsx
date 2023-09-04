@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   Checkbox,
   Flex,
   Heading,
@@ -10,7 +11,6 @@ import {
 } from "@chakra-ui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { InputField } from "@modules/common/Form";
-import { PrimaryButton } from "@modules/common/PrimaryButton";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { LoginSchema } from "../../../utils/validations/validations";
@@ -20,14 +20,13 @@ import { useAppState } from "@store/index";
 import { useEffect } from "react";
 
 export function Login() {
-  const { Login } = useAuth();
+  const { Login,isLoading } = useAuth();
   const [state] = useAppState();
-  const navigate  = useNavigate();
+  const navigate = useNavigate();
   const defaultValues = {
     email: "john@mercforms.com",
     password: "Test@123",
   };
-
 
   useEffect(() => {
     if (!state.userProfile?.id) {
@@ -116,22 +115,29 @@ export function Login() {
                 </Checkbox>
               </Box>
               <Box>
-                <PrimaryButton
+                <Button
                   type="submit"
-                  title="Login"
-                  width="100%"
-                  height={50}
-                  fontSize={16}
-                  fontWeight={600}
-                  borderRadius="10px"
-                  padding="0px"
-                  borderColor="#6d63fc"
-                  showLoaderonBtn={true}
-                />
+                  w="full"
+                  rounded={"xl"}
+                  shadow={"2xl"}
+                  bgGradient={"linear-gradient(to right, #8172fd, #c0afff)"}
+                  color={"#fff"}
+                  h={50}
+                  _hover={{
+                    border: "1px solid #6d63fc",
+                    bg: "#fff",
+                    transform: "translateY(-0.05em)",
+                    color: "#000",
+                  }}
+                  isLoading={isLoading}
+                  loadingText='Please Wait...'
+                >
+                  Login
+                </Button>
               </Box>
             </SimpleGrid>
           </form>
-          <Text>
+          <Text color={"#6d63fc"}>
             Don't have an account? <Link to="/signup">Signup</Link>
           </Text>
         </Stack>

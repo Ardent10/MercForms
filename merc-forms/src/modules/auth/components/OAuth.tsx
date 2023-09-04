@@ -1,5 +1,12 @@
-import { Box, Divider, Flex, SimpleGrid, Text } from "@chakra-ui/react";
-import { PrimaryButton } from "@modules/common/PrimaryButton";
+import {
+  AbsoluteCenter,
+  Box,
+  Button,
+  Divider,
+  Flex,
+  SimpleGrid,
+  Text,
+} from "@chakra-ui/react";
 
 interface OAuthProps {
   label: string;
@@ -9,25 +16,24 @@ interface OAuthProps {
 export const OAuth = ({ label, onClick }: OAuthProps) => {
   return (
     <SimpleGrid columns={1} spacing={1} minWidth="300px">
-      <PrimaryButton
-        fontSize={12}
-        fontWeight={500}
-        color="#000"
-        backgroundColor="#fff"
-        title={label}
-        type="button"
-        borderColor="1px solid #000"
-        borderRadius="8px"
-        height={45}
-        // showLoaderonBtn={true}
-        buttonChild={
-          <img
-            src="/assets/google.svg"
-            alt="google"
-            style={{ width: "20px", height: "20px", marginRight: "10px" }}
-          />
-        }
-      />
+      <Button
+        type="submit"
+        bg={"#fff"}
+        border={"1px solid #6d63fc"}
+        rounded={"lg"}
+        h={45}
+      >
+        <AbsoluteCenter>
+          <Flex alignItems="center" justifyContent="center">
+            <img
+              src="/assets/google.svg"
+              alt="google"
+              style={{ width: "20px", height: "20px", marginRight: "10px" }}
+            />
+            {label}
+          </Flex>
+        </AbsoluteCenter>
+      </Button>
       <Box width="100%">
         <Flex alignItems="center" justifyContent="center">
           <Divider flex={1} borderColor="blue" />

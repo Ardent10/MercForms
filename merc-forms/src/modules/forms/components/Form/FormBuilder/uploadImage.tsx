@@ -1,12 +1,13 @@
 import {
   Box,
+  Button,
   Divider,
   Grid,
   IconButton,
   Text,
   useToast,
 } from "@chakra-ui/react";
-import { Dropzone, PrimaryButton } from "@modules/common";
+import { Dropzone} from "@modules/common";
 import { useRef, useState } from "react";
 import { FiEdit2 } from "react-icons/fi";
 import { GrFormClose } from "react-icons/gr";
@@ -36,6 +37,7 @@ export function UploadImage({ control, name, setOpenModal, setValue }: props) {
   const [fileSizeErrorMsg, setFileSizeErrorMsg] = useState<string>("");
   const [fileTaken, setFile] = useState<File[]>([]);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const toast = useToast();
 
   const handleChange = (files: FileList | null) => {
@@ -89,7 +91,8 @@ export function UploadImage({ control, name, setOpenModal, setValue }: props) {
     ]);
   };
 
-  const handleUpload = async() => {
+  const handleUpload = async () => {
+    setIsLoading(true);
     if (fileTaken.length !== 0) {
       const base64 = await ConvertImageToBase64(fileTaken[0]);
       setValue(name, base64);
@@ -114,6 +117,7 @@ export function UploadImage({ control, name, setOpenModal, setValue }: props) {
         isClosable: true,
       });
     }
+    setIsLoading(false);
   };
 
   return (
@@ -203,17 +207,26 @@ export function UploadImage({ control, name, setOpenModal, setValue }: props) {
 
             <Grid p={2} display="flex" justifyContent="flex-end">
               <Grid>
-                <PrimaryButton
-                  fontSize={12}
-                  title="Upload"
-                  borderColor="1px solid #8a89fa"
-                  backgroundColor="#8a89fa"
-                  borderRadius="8px"
-                  height={45}
-                  disabled={selectedFilePath.length === 0}
+                <Button
+                  h={35}
+                  w="full"
+                  rounded={"xl"}
+                  shadow={"2xl"}
+                  bgGradient={"linear-gradient(to right, #8172fd, #c0afff)"}
+                  color={"#fff"}
+                  _hover={{
+                    border: "1px solid #6d63fc",
+                    bg: "#fff",
+                    transform: "translateY(-0.05em)",
+                    color: "#000",
+                  }}
+                  isLoading={isLoading}
+                  loadingText="Please Wait..."
+                  isDisabled={selectedFilePath.length === 0}
                   onClick={handleUpload}
-                  showLoaderonBtn={true}
-                />
+                >
+                  Upload
+                </Button>
               </Grid>
             </Grid>
           </Box>
