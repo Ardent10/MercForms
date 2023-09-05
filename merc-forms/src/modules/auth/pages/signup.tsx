@@ -82,14 +82,15 @@ export function Signup() {
         flex={{ base: 1, md: "50%" }}
         flexDirection={{ base: "column", lg: "row" }}
       >
-        <Image
-          alt={"Login Image"}
-          objectFit={"contain"}
-          src={"/logo.png"}
-          width={100}
-          height={100}
-          align={{ base: "center", lg: "left" }}
-        />
+        <Stack align={{ base: "center", lg: "left" }}>
+          <Image
+            alt={"Login Image"}
+            objectFit={"contain"}
+            src={"/logo.png"}
+            width={100}
+            height={100}
+          />
+        </Stack>
         <Stack
           spacing={4}
           pl={5}
@@ -267,7 +268,7 @@ export function Signup() {
         </Flex>
       )}
       <Text
-        position="absolute"
+        position={{ base: "fixed", lg: "absolute" }}
         bottom={0}
         right={0}
         fontSize={24}
