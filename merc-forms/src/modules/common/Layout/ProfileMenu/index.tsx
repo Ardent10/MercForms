@@ -19,8 +19,8 @@ export function ProfileMenu() {
   const { Logout } = useAuth();
 
   const handleLogout = () => {
-     Logout();
-  }
+    Logout();
+  };
 
   return (
     <Menu>
@@ -37,9 +37,11 @@ export function ProfileMenu() {
       >
         <Avatar
           size={"sm"}
-          name={state.userProfile.firstName + " " + state.userProfile.lastName}
+          name={
+            state?.userProfile?.firstName + " " + state?.userProfile?.lastName
+          }
           src={
-            state.userProfile.username === "zakariya.khan"
+            state?.userProfile?.username === "zakariya.khan"
               ? "https://zakariya-ardent10.vercel.app/images/profile3.png"
               : ""
           }
@@ -53,10 +55,10 @@ export function ProfileMenu() {
           <Avatar
             size={"2xl"}
             name={
-              state.userProfile.firstName + " " + state.userProfile.lastName
+              state?.userProfile?.firstName + " " + state?.userProfile?.lastName
             }
             src={
-              state.userProfile.username === "zakariya.khan"
+              state?.userProfile?.username === "zakariya.khan"
                 ? "https://zakariya-ardent10.vercel.app/images/profile3.png"
                 : ""
             }
@@ -64,7 +66,7 @@ export function ProfileMenu() {
         </Center>
         <br />
         <Center>
-          <Text>{state.userProfile?.username}</Text>
+          <Text>{state?.userProfile?.username}</Text>
         </Center>
         <br />
         <MenuDivider />

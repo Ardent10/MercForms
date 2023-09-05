@@ -30,6 +30,7 @@ export const choiceSchema: Schema<IChoice> = new mongoose.Schema({
 
 export const questionSchema: Schema<IQuestion> = new mongoose.Schema({
   questionText: String,
+  questionImageUrl: String,
   answerType: String,
   paragraphAnswer: String,
   isRequired: Boolean,

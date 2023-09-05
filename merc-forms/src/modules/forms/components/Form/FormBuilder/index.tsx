@@ -97,7 +97,7 @@ export const FormBuilder = () => {
         form_description: formToUpdate?.form_description,
         questions: formToUpdate?.questions,
       });
-
+       console.log("formToUpdate", formToUpdate); 
       setIsUpdateFormLoaded(false);
     }
   }, [location.pathname, reset, formToUpdate, updateRoute]);
@@ -145,7 +145,7 @@ export const FormBuilder = () => {
             <Container
               id="formBuilder-Input-container"
               w={"full"}
-              maxW={"50vw"}
+              maxW={{base: "full", lg: "50vw"}}
               px={0}
             >
               {/* All the accordionItems can be dragged to re-order the array. */}

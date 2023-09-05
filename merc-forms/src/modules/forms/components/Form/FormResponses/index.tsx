@@ -153,7 +153,8 @@ export const FormResponse = ({ currentForm }: any) => {
             <Container
               id="formResponse-Input-container"
               w={"full"}
-              maxW={"50vw"}
+              // maxW={"50vw"}
+              maxW={{ base: "full", lg: "50vw" }}
               px={0}
             >
               <UserDetails

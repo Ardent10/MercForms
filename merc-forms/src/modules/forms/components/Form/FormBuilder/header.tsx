@@ -17,7 +17,7 @@ export const FormHeader = ({ control, textColor, bgColor}:IFormHeaderProps) => {
       rounded={"2xl"}
       shadow={"xl"}
       p={5}
-      w={"50vw"}
+      maxW={{ base: "full", lg: "50vw" }}
       bg={bgColor}
     >
       <InputField

@@ -191,6 +191,7 @@ export function useForms() {
           duration: 5000,
           isClosable: true,
         });
+        navigate("/forms");
       } else {
         toast({
           title: "Form Update Failed",

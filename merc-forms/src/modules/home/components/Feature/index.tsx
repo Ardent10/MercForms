@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import {
   Box,
+  Center,
   Flex,
   Heading,
   Image,
@@ -68,8 +69,13 @@ function Feature({
           bgPosition="center"
           bgRepeat="no-repeat"
           bgImage={`url('${bgImageSrc}')`}
+          direction={{ base: "column", md: "row" }}
+          verticalAlign={"center"}
+          display={"flex"}
+          justifyContent={"center"}
+          gap={5}
         >
-          <Box flex="1" display={{ base: "none", md: "block" }}>
+          <Box display={"block"}>
             <Box
               bg={useColorModeValue("white", "purple.200")}
               rounded="2xl"
@@ -82,11 +88,9 @@ function Feature({
             </Box>
           </Box>
 
-          <Box flex="1">
-            <Box textAlign={"left"} px={50}>
-              <Heading fontSize={46} fontWeight={500}>
-                {heading}
-              </Heading>
+          <Box>
+            <Box textAlign={{ base: "center", lg: "left" }} px={50}>
+              <Heading fontWeight={500}>{heading}</Heading>
               <Text fontSize={25}>{text}</Text>
             </Box>
           </Box>
@@ -102,16 +106,18 @@ function Feature({
           bgSize="cover"
           bgPosition={"left"}
           bgRepeat="no-repeat"
+          direction={{ base: "column", md: "row" }}
+          display={"flex"}
+          justifyContent={"center"}
+          gap={5}
         >
-          <Box flex="1">
-            <Box textAlign={"left"} px={50}>
-              <Heading fontSize={46} fontWeight={500}>
-                {heading}
-              </Heading>
+          <Box flex={{ base: 0, lg: 1 }}>
+            <Box textAlign={{ base: "center", lg: "left" }} px={50}>
+              <Heading fontWeight={500}>{heading}</Heading>
               <Text fontSize={25}>{text}</Text>
             </Box>
           </Box>
-          <Box flex="1" display={{ base: "none", md: "block" }}>
+          <Box display={"block"} flex={{ base: 0, lg: 1 }}>
             <Box
               bg={useColorModeValue("white", "purple.200")}
               position="relative"
