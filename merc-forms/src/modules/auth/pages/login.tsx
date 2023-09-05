@@ -1,3 +1,4 @@
+import React, { useEffect } from "react";
 import {
   Box,
   Button,
@@ -8,6 +9,8 @@ import {
   SimpleGrid,
   Stack,
   Text,
+  useColorModeValue,
+  useBreakpointValue,
 } from "@chakra-ui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { InputField } from "@modules/common/Form";
@@ -17,10 +20,9 @@ import { LoginSchema } from "../../../utils/validations/validations";
 import { OAuth } from "../components/OAuth";
 import { useAuth } from "../hooks";
 import { useAppState } from "@store/index";
-import { useEffect } from "react";
 
 export function Login() {
-  const { Login,isLoading } = useAuth();
+  const { Login, isLoading } = useAuth();
   const [state] = useAppState();
   const navigate = useNavigate();
   const defaultValues = {
@@ -46,23 +48,30 @@ export function Login() {
     });
   });
 
+  const isMobile = useBreakpointValue({ base: true, md: false });
+
   return (
     <Stack
       minH={"100vh"}
       minW={"100vw"}
-      direction={{ base: "column", md: "row" }}
+      direction={isMobile ? "column" : "row"}
       bgImage={"url('assets/auth/bg.svg')"}
       bgSize="cover"
       bgPosition={"left"}
       bgRepeat="no-repeat"
     >
-      <Flex p={3} flex={{ base: 1, md: "50%" }}>
+      <Flex
+        p={3}
+        flex={{ base: 1, md: "50%" }}
+        flexDirection={{ base: "column", lg: "row" }}
+      >
         <Image
           alt={"Login Image"}
           objectFit={"contain"}
           src={"/logo.png"}
           width={100}
           height={100}
+          align={{ base: "center", lg: "left" }}
         />
         <Stack
           spacing={4}
@@ -73,10 +82,14 @@ export function Login() {
           justify={"center"}
         >
           <Stack>
-            <Heading textAlign="center" fontSize={"5xl"} color={"#6d63fc"}>
+            <Heading
+              textAlign={isMobile ? "center" : "left"}
+              fontSize={isMobile ? "4xl" : "5xl"}
+              color={"#6d63fc"}
+            >
               Welcome Back
             </Heading>
-            <Text textAlign="center">
+            <Text textAlign={isMobile ? "center" : "left"}>
               Transform Data into Insights with MercForms.
             </Text>
           </Stack>
@@ -130,7 +143,7 @@ export function Login() {
                     color: "#000",
                   }}
                   isLoading={isLoading}
-                  loadingText='Please Wait...'
+                  loadingText="Please Wait..."
                 >
                   Login
                 </Button>
@@ -142,29 +155,32 @@ export function Login() {
           </Text>
         </Stack>
       </Flex>
-      <Flex
-        flex={{ base: 1, md: "50%" }}
-        // bg={"#eae8ff"}
-      >
-        <Image
-          alt={"Login Image"}
-          objectFit={"contain"}
-          src={"/signup-hero.png"}
-        />
-        <Text
-          position="absolute"
-          bottom={0}
-          right={0}
-          fontSize={24}
-          fontWeight={900}
-          color={"#6d63fc"}
-          textAlign="center"
-          padding={4}
-          backgroundColor="rgba(255, 255, 255, 0.7)"
+      {!isMobile && (
+        <Flex
+          flex={{ base: 1, md: "50%" }}
+          // bg={"#eae8ff"}
+          direction={"column"}
         >
-          MercForms.
-        </Text>
-      </Flex>
+          <Image
+            alt={"Login Image"}
+            objectFit={"contain"}
+            src={"/signup-hero.png"}
+          />
+        </Flex>
+      )}
+      <Text
+        position="absolute"
+        bottom={0}
+        right={0}
+        fontSize={24}
+        fontWeight={900}
+        color={"#6d63fc"}
+        textAlign="center"
+        padding={4}
+        backgroundColor="rgba(255, 255, 255, 0.7)"
+      >
+        MercForms.
+      </Text>
     </Stack>
   );
 }

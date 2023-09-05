@@ -10,6 +10,7 @@ import {
   Image,
   Stack,
   Text,
+  useBreakpointValue,
 } from "@chakra-ui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Selector } from "@modules/common";
@@ -65,23 +66,29 @@ export function Signup() {
     });
   });
 
+  const isMobile = useBreakpointValue({ base: true, md: false });
   return (
     <Stack
       minH={"100vh"}
       minW={"100vw"}
-      direction={{ base: "column", md: "row" }}
+      direction={isMobile ? "column" : "row"}
       bgImage={"url('assets/auth/bg.svg')"}
       bgSize="cover"
       bgPosition={"left"}
       bgRepeat="no-repeat"
     >
-      <Flex p={3} flex={{ base: 1, md: "50%" }}>
+      <Flex
+        p={3}
+        flex={{ base: 1, md: "50%" }}
+        flexDirection={{ base: "column", lg: "row" }}
+      >
         <Image
           alt={"Login Image"}
           objectFit={"contain"}
           src={"/logo.png"}
           width={100}
           height={100}
+          align={{ base: "center", lg: "left" }}
         />
         <Stack
           spacing={4}
@@ -92,10 +99,14 @@ export function Signup() {
           justify={"center"}
         >
           <Stack>
-            <Heading textAlign="center" fontSize={"5xl"} color={"#6d63fc"}>
+            <Heading
+              textAlign={isMobile ? "center" : "left"}
+              fontSize={isMobile ? "4xl" : "5xl"}
+              color={"#6d63fc"}
+            >
               Create Account
             </Heading>
-            <Text textAlign="center">
+            <Text textAlign={isMobile ? "center" : "left"}>
               Signup Today and Transform Data into Insights
             </Text>
           </Stack>
@@ -242,26 +253,32 @@ export function Signup() {
           </Text>
         </Stack>
       </Flex>
-      <Flex flex={{ base: 1, md: "50%" }}>
-        <Image
-          alt={"Login Image"}
-          objectFit={"contain"}
-          src={"/signup-hero.png"}
-        />
-        <Text
-          position="absolute"
-          bottom={0}
-          right={0}
-          fontSize={24}
-          fontWeight={900}
-          color={"#6d63fc"}
-          textAlign="center"
-          padding={4}
-          backgroundColor="rgba(255, 255, 255, 0.7)"
+      {!isMobile && (
+        <Flex
+          flex={{ base: 1, md: "50%" }}
+          // bg={"#eae8ff"}
+          direction={"column"}
         >
-          MercForms.
-        </Text>
-      </Flex>
+          <Image
+            alt={"Login Image"}
+            objectFit={"contain"}
+            src={"/signup-hero.png"}
+          />
+        </Flex>
+      )}
+      <Text
+        position="absolute"
+        bottom={0}
+        right={0}
+        fontSize={24}
+        fontWeight={900}
+        color={"#6d63fc"}
+        textAlign="center"
+        padding={4}
+        backgroundColor="rgba(255, 255, 255, 0.7)"
+      >
+        MercForms.
+      </Text>
     </Stack>
   );
 }

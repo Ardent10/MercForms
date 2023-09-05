@@ -61,7 +61,7 @@ function Feature({
       {direction === "img-left-align" ? (
         <Flex
           id="feature"
-          px={10}
+          px={{ base: 5, lg: 10 }}
           w={"full"}
           h={"100vh"}
           align={"center"}
@@ -91,14 +91,14 @@ function Feature({
           <Box>
             <Box textAlign={{ base: "center", lg: "left" }} px={50}>
               <Heading fontWeight={500}>{heading}</Heading>
-              <Text fontSize={25}>{text}</Text>
+              <Text fontSize={{ base: 15, lg: 25 }}>{text}</Text>
             </Box>
           </Box>
         </Flex>
       ) : (
         <Flex
           id="feature"
-          px={10}
+          px={{ base: 5, lg: 10 }}
           align={"center"}
           h={"100vh"}
           w={"full"}
@@ -114,7 +114,7 @@ function Feature({
           <Box flex={{ base: 0, lg: 1 }}>
             <Box textAlign={{ base: "center", lg: "left" }} px={50}>
               <Heading fontWeight={500}>{heading}</Heading>
-              <Text fontSize={25}>{text}</Text>
+              <Text fontSize={{ base: 15, lg: 25 }}>{text}</Text>
             </Box>
           </Box>
           <Box display={"block"} flex={{ base: 0, lg: 1 }}>

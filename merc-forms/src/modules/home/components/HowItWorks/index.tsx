@@ -31,9 +31,7 @@ export function HowItWorks() {
         justifyContent="center"
       >
         <Box flex="1" py={5} textAlign={"center"}>
-          <Heading fontWeight={500}>
-            How does MercForms works?
-          </Heading>
+          <Heading fontWeight={500}>How does MercForms works?</Heading>
         </Box>
         <Center
           bg={useColorModeValue("#dbceff", "purple.200")}
@@ -53,7 +51,7 @@ export function HowItWorks() {
           </AspectRatio>
         </Center>
         <Box flex="1" py={5} textAlign={"center"} px={50}>
-          <Text fontSize={25}>
+          <Text fontSize={{ base: 15, lg: 25 }}>
             MercForms simplifies the form creation process. Choose from various
             question types, effortlessly rearrange questions using
             drag-and-drop, and customize options as easily as copying and
