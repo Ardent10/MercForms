@@ -21,6 +21,7 @@ export const FormResponseHeader = ({
       rounded={"2xl"}
       shadow={"xl"}
       p={5}
+      minW={{ base: "full", lg: "50vw" }}
       maxW={{ base: "full", lg: "50vw" }}
       bg={bgColor}
     >

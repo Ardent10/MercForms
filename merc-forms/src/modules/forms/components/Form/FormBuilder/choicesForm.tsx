@@ -39,10 +39,13 @@ export const ChoicesForm = ({
   watchAllFields,
 }: IChoice) => {
   const [openModal, setOpenModal] = useState(false);
+  const [uploadImageName, setUploadImageName] = useState<any>(null);
   const { fields, append, remove } = useFieldArray({
     control,
     name: `questions[${questionIndex}].choices`,
   });
+
+  console.log("uploadImageName", uploadImageName);
 
   const styles = Styles();
   const questionsList = watchAllFields.questions;
@@ -63,26 +66,30 @@ export const ChoicesForm = ({
           />
         ) : answerType === "Checkboxes" || answerType === "Multiple Choice" ? (
           <>
+            <CustomModal
+              isOpen={openModal}
+              onClose={() => setOpenModal(false)}
+              title="Upload Image"
+              size="xl"
+            >
+              <UploadImage
+                control={control}
+                name={uploadImageName ? uploadImageName : ""}
+                setOpenModal={setOpenModal}
+                setValue={setValue}
+              />
+            </CustomModal>
             {fields.map((choice, choiceIndex) => (
               <>
                 <Box key={choice.id}>
-                  <CustomModal
-                    isOpen={openModal}
-                    onClose={() => setOpenModal(false)}
-                    title="Upload Image"
-                    size="xl"
-                  >
-                    <UploadImage
-                      control={control}
-                      name={`questions[${questionIndex}].choices[${choiceIndex}].imageUrl`}
-                      setOpenModal={setOpenModal}
-                      setValue={setValue}
-                    />
-                  </CustomModal>
-
                   {answerType === "Checkboxes" ? (
                     // Checkbox choices here
-                    <Stack key={choice.id} alignItems="center" maxW="full" flex={1}>
+                    <Stack
+                      key={choice.id}
+                      alignItems="center"
+                      maxW="full"
+                      flex={1}
+                    >
                       <Box sx={styles.accordionBoxStyles} gap={2}>
                         <Box
                           sx={styles.accordionBoxStyles}
@@ -120,7 +127,12 @@ export const ChoicesForm = ({
                           icon={<HiOutlinePhoto />}
                           label="Add Image"
                           color="#fff"
-                          onClick={() => setOpenModal(true)}
+                          onClick={() => {
+                            setUploadImageName(
+                              `questions[${questionIndex}].choices[${choiceIndex}].imageUrl`
+                            );
+                            setOpenModal(true);
+                          }}
                         />
                         <CustomTooltipWithIcon
                           icon={<GrFormClose />}
@@ -186,7 +198,12 @@ export const ChoicesForm = ({
                             icon={<HiOutlinePhoto />}
                             label="Add Image"
                             color="#fff"
-                            onClick={() => setOpenModal(true)}
+                            onClick={() => {
+                              setUploadImageName(
+                                `questions[${questionIndex}].choices[${choiceIndex}].imageUrl`
+                              );
+                              setOpenModal(true);
+                            }}
                           />
                           <CustomTooltipWithIcon
                             icon={<GrFormClose />}

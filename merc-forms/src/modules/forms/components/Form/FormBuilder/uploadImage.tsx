@@ -119,7 +119,7 @@ export function UploadImage({ control, name, setOpenModal, setValue }: props) {
     }
     setIsLoading(false);
   };
-
+  console.log("IMAGE UPLOAD NAME: ",name);
   return (
     <Grid templateColumns="1fr" gap={4}>
       <Divider />

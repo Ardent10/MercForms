@@ -191,6 +191,7 @@ export function useForms() {
           duration: 5000,
           isClosable: true,
         });
+        await fetchAllForms();
         navigate("/forms");
       } else {
         toast({

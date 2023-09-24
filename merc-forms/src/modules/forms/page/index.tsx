@@ -24,37 +24,6 @@ import { RiSendPlaneFill } from "react-icons/ri";
 import { SendFormLinkModal } from "../components/Form/FormBuilder/sendFormLink";
 import { HiEye } from "react-icons/hi";
 
-const templates = [
-  {
-    id: 1,
-    image: <HiDocumentPlus size={80} color={"white"} />,
-    color: "linear-gradient(to right, #8172fd, #c0afff)",
-    title: "Create Form",
-    link: "/forms/create",
-  },
-  {
-    id: 2,
-    imageSrc: "/assets/templates/event.png",
-    color: "blue",
-    title: "Event Registration",
-    link: "/forms/update",
-  },
-  {
-    id: 3,
-    imageSrc: "/assets/templates/contact.png",
-    color: "blue",
-    title: "Contact Form",
-    link: "/forms/update",
-  },
-  {
-    id: 4,
-    title: "Part Invitation",
-    imageSrc: "/assets/templates/party.png",
-    color: "blue",
-    link: "/forms/update",
-  },
-];
-
 export const Forms = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -80,7 +49,7 @@ export const Forms = () => {
 
   useEffect(() => {
     const getAllForms = async () => {
-      const res = await fetchAllForms();
+      await fetchAllForms();
     };
     if (state?.userProfile?.id) {
       getAllForms();

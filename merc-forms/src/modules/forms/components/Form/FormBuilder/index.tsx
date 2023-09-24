@@ -97,7 +97,6 @@ export const FormBuilder = () => {
         form_description: formToUpdate?.form_description,
         questions: formToUpdate?.questions,
       });
-       console.log("formToUpdate", formToUpdate); 
       setIsUpdateFormLoaded(false);
     }
   }, [location.pathname, reset, formToUpdate, updateRoute]);
